@@ -630,5 +630,71 @@
     ],
     "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
     "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "external_case_01",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "中芯国际 A 股与港股对比分析发布页",
+    "type": "external_url",
+    "copied_path": "",
+    "public_url": "https://alextaoo.github.io/AI-quant/",
+    "topic": "中芯国际 / A股港股对比",
+    "tech": [
+      "GitHub Pages",
+      "HTML",
+      "交互看板"
+    ],
+    "learning_tags": [
+      "公开发布完整",
+      "对比视角清楚",
+      "图表表达集中"
+    ],
+    "why_selected": "这个作品用 GitHub Pages 交付，把同一公司 A 股与港股的对比分析组织成可直接访问的页面，适合参考公开发布和跨市场对比表达。",
+    "caution": "参考时重点学习页面组织和分析链路，不要把展示结论直接当成投资建议。"
+  },
+  {
+    "id": "external_case_02",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "中芯国际行情分析发布页",
+    "type": "external_url",
+    "copied_path": "",
+    "public_url": "https://paradisefo.github.io/AI-quant/",
+    "topic": "中芯国际 / 行情分析",
+    "tech": [
+      "GitHub Pages",
+      "HTML",
+      "分析报告"
+    ],
+    "learning_tags": [
+      "公开发布完整",
+      "主题聚焦",
+      "图表说明清楚"
+    ],
+    "why_selected": "这个作品将个股行情分析做成公开网页，适合同学参考如何把作业从本地 HTML 进一步发布成可分享链接。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "external_case_03",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "交易面板 GitHub Pages 发布页",
+    "type": "external_url",
+    "copied_path": "",
+    "public_url": "https://rcjd2fxtn7-ux.github.io/BA-TASK/trading_panel.html",
+    "topic": "股票交易面板 / 数据引擎",
+    "tech": [
+      "GitHub Pages",
+      "HTML",
+      "交互看板"
+    ],
+    "learning_tags": [
+      "公开发布完整",
+      "看板结构清楚",
+      "交互体验好"
+    ],
+    "why_selected": "这个作品把交易面板单独发布为 GitHub Pages 页面，适合参考从作业文件到线上展示的交付方式。",
+    "caution": "公开链接可能随学生仓库调整而变化，参考时请以页面当前可访问内容为准。"
   }
 ]
