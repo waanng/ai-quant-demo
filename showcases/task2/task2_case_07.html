@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中芯国际 SMIC 智能投资看板</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333}
+.header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);color:#fff;padding:18px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.header h1{font-size:22px;font-weight:600}
+.header .ticker{font-size:13px;opacity:.75}
+.header-left{display:flex;align-items:center;flex-wrap:wrap;gap:12px}
+.price-badge{text-align:right}
+.price-badge .price{font-size:28px;font-weight:700}
+.price-badge .chg{font-size:14px}
+.price-badge .chg.up{color:#ff6b6b}
+.price-badge .chg.down{color:#51cf66}
+.market-badge{display:inline-block;font-size:12px;padding:3px 10px;border-radius:12px;font-weight:500;white-space:nowrap}
+.market-badge.closed{background:rgba(255,255,255,.1);color:rgba(255,255,255,.5)}
+.main-layout{display:flex;gap:14px;padding:14px;max-width:1500px;margin:0 auto}
+.left-col{flex:1;min-width:0;display:flex;flex-direction:column;gap:14px}
+.right-col{width:380px;flex-shrink:0;display:flex;flex-direction:column;gap:14px}
+.card{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:hidden}
+.card-header{padding:14px 18px;border-bottom:1px solid #eee;font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
+.card-header .icon{font-size:18px}
+.card-body{padding:14px 18px}
+.chart-container{width:100%;height:520px}
+.stock-tabs{display:flex;gap:0;padding:10px 18px 0;background:#fafafa;border-bottom:1px solid #eee}
+.stock-tabs button{padding:8px 20px;border:1px solid #d9d9d9;border-radius:5px 5px 0 0;background:#fff;cursor:pointer;font-size:14px;font-weight:600;transition:all .2s;border-bottom:2px solid transparent;margin-bottom:-1px}
+.stock-tabs button:hover{border-color:#1890ff;color:#1890ff}
+.stock-tabs button.active-a{background:#1890ff;color:#fff;border-color:#1890ff;border-bottom-color:#1890ff}
+.stock-tabs button.active-hk{background:#26a69a;color:#fff;border-color:#26a69a;border-bottom-color:#26a69a}
+.toolbar{display:flex;gap:6px;padding:10px 18px;background:#fafafa;border-bottom:1px solid #eee;flex-wrap:wrap}
+.toolbar button{padding:5px 14px;border:1px solid #d9d9d9;border-radius:5px;background:#fff;cursor:pointer;font-size:13px;transition:all .2s}
+.toolbar button:hover{border-color:#1890ff;color:#1890ff}
+.toolbar button.active{background:#1890ff;color:#fff;border-color:#1890ff}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.metric-item{background:#f8f9fa;border-radius:6px;padding:10px 12px}
+.metric-item .metric-label{font-size:11px;color:#999;margin-bottom:4px}
+.metric-item .metric-value{font-size:16px;font-weight:700}
+.metric-item .metric-value.up{color:#ff5252}
+.metric-item .metric-value.down{color:#26a69a}
+.analysis-list{list-style:none}
+.analysis-list li{padding:7px 0;font-size:13px;line-height:1.6;border-bottom:1px solid #f5f5f5}
+.analysis-list li:last-child{border-bottom:none}
+.analysis-list .bull{color:#ff5252;font-weight:600}
+.analysis-list .bear{color:#26a69a;font-weight:600}
+.badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600}
+.badge-red{background:#fff1f0;color:#ff4d4f}
+.badge-green{background:#f6ffed;color:#52c41a}
+.badge-blue{background:#e6f7ff;color:#1890ff}
+.badge-orange{background:#fff7e6;color:#fa8c16}
+.risk-bar{display:flex;gap:4px;align-items:center;margin-top:6px}
+.risk-bar .risk-label{font-size:12px;width:80px}
+.risk-bar .risk-fill{flex:1;height:6px;border-radius:3px;background:#eee;overflow:hidden}
+.risk-bar .risk-fill div{height:100%;border-radius:3px}
+.fin-table{width:100%;border-collapse:collapse;font-size:13px}
+.fin-table th,.fin-table td{padding:8px 10px;text-align:center;border-bottom:1px solid #f0f0f0}
+.fin-table th{background:#fafafa;font-weight:600;color:#666}
+.update-hint{font-size:11px;color:#999;margin-top:4px}
+.placeholder-note{font-size:12px;color:#999;line-height:1.8;text-align:center;padding:20px 0}
+@media (max-width:900px){.main-layout{flex-direction:column}.right-col{width:100%}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+
+<!-- ========== 头部 ========== -->
+<div class="header">
+<div class="header-left">
+<div>
+<h1 id="header-title">中芯国际 688981.SH <span class="ticker" id="header-ticker">· SMIC · 科创板 半导体晶圆代工</span></h1>
+<div class="update-hint" id="data-source" style="font-size:12px;opacity:.7;margin-top:4px;color:rgba(255,255,255,.7)">数据来源：Tushare Pro · 近一年历史日线</div>
+</div>
+<span class="market-badge closed">○ 休市</span>
+</div>
+<div class="price-badge">
+<div id="live-price" class="price">--</div>
+<div id="live-chg" class="chg">--</div>
+</div>
+</div>
+
+<!-- ========== 主体双栏 ========== -->
+<div class="main-layout">
+<div class="left-col">
+
+<!-- K线图卡片 -->
+<div class="card">
+<div class="card-header"><span class="icon">📈</span>K线图 · <span id="chart-stock-name">中芯国际 688981.SH</span></div>
+<div class="stock-tabs">
+<button id="tab-a" onclick="switchStock('a')" class="active-a">A股 688981.SH 科创板</button>
+<button id="tab-hk" onclick="switchStock('hk')">港股 00981.HK (中国香港)</button>
+</div>
+<div class="toolbar" id="range-toolbar">
+<button data-range="all" class="active">全部</button>
+<button data-range="1m">近1月</button>
+<button data-range="3m">近3月</button>
+<button data-range="6m">近6月</button>
+<button data-range="1y">近1年</button>
+</div>
+<div id="kline-chart" class="chart-container"></div>
+</div>
+
+<!-- 技术面速览 -->
+<div class="card">
+<div class="card-header"><span class="icon">📊</span>技术面速览 · <span id="tech-stock-label">A股</span></div>
+<div class="card-body">
+<div class="metric-grid" id="tech-metrics">
+<div class="metric-item"><div class="metric-label">RSI (14)</div><div class="metric-value" id="rsi-val">--</div></div>
+<div class="metric-item"><div class="metric-label">20日均线</div><div class="metric-value" id="ma20-val">--</div></div>
+<div class="metric-item"><div class="metric-label">60日均线</div><div class="metric-value" id="ma60-val">--</div></div>
+<div class="metric-item"><div class="metric-label">52周最高</div><div class="metric-value up" id="high52-val">--</div></div>
+<div class="metric-item"><div class="metric-label">近20日波动率</div><div class="metric-value" id="volatility-val">--</div></div>
+<div class="metric-item"><div class="metric-label">支撑/阻力</div><div class="metric-value" id="sr-val">--</div></div>
+<div class="metric-item"><div class="metric-label">日均成交量(<span id="vol-unit-label">万手</span>)</div><div class="metric-value" id="avgvol-val">--</div></div>
+<div class="metric-item"><div class="metric-label">均线排列</div><div class="metric-value up" id="ma-align">--</div></div>
+</div>
+</div>
+</div>
+
+<!-- 投资分析 -->
+<div class="card">
+<div class="card-header"><span class="icon">🎯</span>投资分析 · 中芯国际</div>
+<div class="card-body">
+<ul class="analysis-list">
+<li><span class="bull">◆ 看多逻辑</span></li>
+<li>① 半导体国产替代核心标的，晶圆代工自主可控战略支柱</li>
+<li>② 成熟制程产能持续扩张，55nm/28nm节点放量增长</li>
+<li>③ 政策支持力度大，大基金三期注资预期明确</li>
+<li>④ 内需市场广阔，国产芯片设计公司产能需求旺盛</li>
+<li>⑤ A+H双上市，科创板流动性充裕，融资渠道多元</li>
+<li style="margin-top:6px"><span class="bear">◆ 风险提示</span></li>
+<li>① 先进制程受限（美国制裁设备禁运），14nm以下突破困难</li>
+<li>② 与台积电差距显著，技术竞争力不足，良率待提升</li>
+<li>③ 资本开支巨大，折旧压力持续侵蚀利润</li>
+<li>④ 行业周期性强，半导体景气度波动大</li>
+<li>⑤ 港股估值偏低，AH价差持续存在，套利空间有限</li>
+<li style="margin-top:6px"><span style="color:#1890ff;font-weight:600">◆ 操作策略</span></li>
+<li>中长期：关注成熟制程产能释放节奏，逢低布局</li>
+<li>短线：关注AH价差变动与板块轮动节奏</li>
+<li>关键观察：季度产能利用率、折旧影响、大基金动向</li>
+</ul>
+</div>
+</div>
+
+</div><!-- left-col -->
+
+<div class="right-col">
+
+<!-- 公司概览 -->
+<div class="card">
+<div class="card-header"><span class="icon">🏢</span>公司概览</div>
+<div class="card-body" style="font-size:13px;line-height:1.8">
+<p>中芯国际（SMIC）成立于2000年，是中国大陆规模最大、技术最先进的半导体晶圆代工企业。主营业务为0.35微米至14纳米多种技术节点的IC晶圆制造。</p>
+<p style="margin-top:8px">2020年登陆科创板（688981.SH），同时在中国香港联交所上市（00981.HK）。总部位于上海，在北京、深圳、天津等地建有晶圆厂。2025年营收突破600亿元，成熟制程产能利用率持续提升。</p>
+<p style="margin-top:8px">核心优势：28nm及以上成熟制程大规模量产能力，国内客户生态完善。核心挑战：先进制程受美国设备出口管制限制，与全球头部代工厂技术差距明显。</p>
+</div>
+</div>
+
+<!-- AH价差对比 -->
+<div class="card">
+<div class="card-header"><span class="icon">🔄</span>AH股对比</div>
+<div class="card-body">
+<div class="metric-grid" id="ah-compare">
+<div class="metric-item"><div class="metric-label">A股收盘</div><div class="metric-value" id="ah-a-price">--</div></div>
+<div class="metric-item"><div class="metric-label">港股收盘(HKD)</div><div class="metric-value" id="ah-hk-price">--</div></div>
+<div class="metric-item"><div class="metric-label">港股折合CNY</div><div class="metric-value" id="ah-hk-cny">--</div></div>
+<div class="metric-item"><div class="metric-label">AH溢价率</div><div class="metric-value" id="ah-premium">--</div></div>
+</div>
+<div style="font-size:12px;color:#999;margin-top:8px">* 港股折合人民币按汇率 0.92 估算，仅供参考</div>
+</div>
+</div>
+
+<!-- 核心财务数据 -->
+<div class="card">
+<div class="card-header"><span class="icon">💰</span>核心财务数据</div>
+<div class="card-body">
+<table class="fin-table">
+<tr><th></th><th>2024年报</th><th>2025年报</th><th>2026E</th></tr>
+<tr><td style="text-align:left">营收(亿)</td><td>452.5</td><td>~610</td><td>--</td></tr>
+<tr><td style="text-align:left">净利润(亿)</td><td>35.2</td><td>--</td><td>--</td></tr>
+<tr><td style="text-align:left">毛利率</td><td>22.6%</td><td>~26%</td><td>--</td></tr>
+<tr><td style="text-align:left">产能利用率</td><td>~85%</td><td>~90%</td><td>--</td></tr>
+</table>
+<div style="font-size:12px;color:#999;margin-top:8px">* 2025/2026数据为市场估算，待财报确认。详细财务数据可通过Tushare接口补充。</div>
+</div>
+</div>
+
+<!-- 估值与风险 -->
+<div class="card">
+<div class="card-header"><span class="icon">⚖️</span>估值与风险</div>
+<div class="card-body">
+<div style="font-size:13px">
+<div style="margin-bottom:6px" id="valuation-info">A股估值信息加载中...</div>
+<div style="margin-top:8px;font-size:12px;color:#999">* 基于历史数据估算，不构成投资建议</div>
+</div>
+<div class="risk-bar"><span class="risk-label">估值风险</span><div class="risk-fill"><div id="risk-valuation-bar" style="width:60%;background:#faad14;height:100%"></div></div></div>
+<div class="risk-bar"><span class="risk-label">波动风险</span><div class="risk-fill"><div id="risk-volatility-bar" style="width:50%;background:#faad14;height:100%"></div></div></div>
+<div class="risk-bar"><span class="risk-label">流动性</span><div class="risk-fill"><div id="risk-liquidity-bar" style="width:20%;background:#52c41a;height:100%"></div></div></div>
+</div>
+</div>
+
+</div><!-- right-col -->
+</div><!-- main-layout -->
+
+<div style="text-align:center;padding:14px;color:#999;font-size:12px">
+涨红跌绿（中国股市惯例） | 数据仅供研究参考，不构成投资建议 | 生成时间: 2026-06-30 20:32
+</div>
+
+<!-- ========== 数据加载 ========== -->
+<script src="smic_data.js"></script>
+<script>
+// ============================================================
+//  全局状态
+// ============================================================
+var currentStock = 'a';  // 当前选中的股票: 'a' 或 'hk'
+var HK_CNY_RATE = 0.92;  // 港币→人民币估算汇率
+
+// 当前活跃数据引用
+var dates, ohlc, volumes, volUnit, volDisplayUnit;
+function setActiveData(stock) {
+    if (stock === 'a') {
+        dates = aDates; ohlc = aOhlc; volumes = aVolumes;
+        volUnit = '手'; volDisplayUnit = '万手';
+    } else {
+        dates = hkDates; ohlc = hkOhlc; volumes = hkVolumes;
+        volUnit = '股'; volDisplayUnit = '万股';
+    }
+}
+setActiveData('a');
+
+// ============================================================
+//  工具函数
+// ============================================================
+function fmtDate(d) { return d.substring(0,4) + '-' + d.substring(4,6) + '-' + d.substring(6,8); }
+function fmtDateShort(d) { return d.substring(4,6) + '/' + d.substring(6,8); }
+
+// ============================================================
+//  MA 计算
+// ============================================================
+function calcMA(data, period) {
+    var result = [];
+    for (var i = 0; i < data.length; i++) {
+        if (i < period - 1) { result.push(null); continue; }
+        var sum = 0;
+        for (var j = 0; j < period; j++) sum += data[i - j][1]; // close
+        result.push(+(sum / period).toFixed(2));
+    }
+    return result;
+}
+
+var ma5 = calcMA(ohlc, 5);
+var ma10 = calcMA(ohlc, 10);
+var ma20 = calcMA(ohlc, 20);
+var ma60 = calcMA(ohlc, 60);
+
+// ============================================================
+//  构建K线数据
+// ============================================================
+var kdata = ohlc.map(function(d) { return [d[0], d[1], d[2], d[3]]; });
+var volData = volumes.map(function(v) { return v[1]; });
+var volColors = volumes.map(function(v) { return v[2] === 1 ? '#ef5350' : '#26a69a'; });
+
+// ============================================================
+//  初始化K线图
+// ============================================================
+var klineChart = echarts.init(document.getElementById('kline-chart'));
+
+function buildOption() {
+    var volDivisor = currentStock === 'a' ? 10000 : 10000000; // A股:手→万手, HK:股→万股
+    return {
+        backgroundColor: '#fff',
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: { type: 'cross' },
+            formatter: function(params) {
+                var d = params[0];
+                if (!d) return '';
+                var idx = d.dataIndex;
+                var item = ohlc[idx];
+                if (!item) return '';
+                var pct = (item[1] - item[0]) / (item[0] || 1) * 100;
+                var isUp = item[1] >= item[0];
+                var clr = isUp ? '#ff5252' : '#26a69a';
+                return '<div style="font-size:13px;line-height:1.8">' +
+                       '<b>' + fmtDate(dates[idx]) + '</b><br/>' +
+                       '开盘：' + item[0].toFixed(2) + '<br/>' +
+                       '收盘：<span style="color:' + clr + '">' + item[1].toFixed(2) + '</span><br/>' +
+                       '最低：' + item[2].toFixed(2) + '<br/>' +
+                       '最高：' + item[3].toFixed(2) + '<br/>' +
+                       '成交量：' + (volData[idx] / volDivisor).toFixed(2) + volDisplayUnit +
+                       (ma5[idx] != null ? '<br/>MA5：' + ma5[idx].toFixed(2) : '') +
+                       (ma10[idx] != null ? '<br/>MA10：' + ma10[idx].toFixed(2) : '') +
+                       (ma20[idx] != null ? '<br/>MA20：' + ma20[idx].toFixed(2) : '') +
+                       (ma60[idx] != null ? '<br/>MA60：' + ma60[idx].toFixed(2) : '') +
+                       '</div>';
+            }
+        },
+        axisPointer: { link: [{ xAxisIndex: 'all' }] },
+        legend: {
+            data: ['K线', 'MA5', 'MA10', 'MA20', 'MA60'],
+            top: 5, left: 'center',
+            textStyle: { fontSize: 11 }
+        },
+        grid: [
+            { left: '8%', right: '3%', top: '12%', height: '58%' },
+            { left: '8%', right: '3%', top: '75%', height: '18%' }
+        ],
+        xAxis: [
+            { type: 'category', data: dates.map(fmtDateShort), gridIndex: 0, axisLabel: { show: false }, axisLine: { lineStyle: { color: '#ddd' } } },
+            { type: 'category', data: dates.map(fmtDateShort), gridIndex: 1, axisLabel: { fontSize: 10, rotate: 45 }, axisLine: { lineStyle: { color: '#ddd' } } }
+        ],
+        yAxis: [
+            { type: 'value', gridIndex: 0, scale: true, splitLine: { lineStyle: { color: '#f0f0f0' } } },
+            { type: 'value', gridIndex: 1, axisLabel: { formatter: function(v) { return (v / volDivisor).toFixed(0) + volDisplayUnit.charAt(0); } } }
+        ],
+        dataZoom: [
+            { type: 'inside', xAxisIndex: [0, 1], start: 0, end: 100 },
+            { show: true, xAxisIndex: [0, 1], type: 'slider', bottom: 5, start: 0, end: 100, showDetail: false }
+        ],
+        series: [
+            { name: 'K线', type: 'candlestick', data: kdata, xAxisIndex: 0, yAxisIndex: 0,
+              itemStyle: { color: '#ef5350', color0: '#26a69a', borderColor: '#ef5350', borderColor0: '#26a69a' },
+              markPoint: {
+                  data: [
+                      { name: '最高', type: 'max', valueDim: 'highest', symbol: 'pin', symbolSize: 40, label: { fontSize: 12 } },
+                      { name: '最低', type: 'min', valueDim: 'lowest', symbol: 'pin', symbolSize: 40, label: { fontSize: 12 }, symbolRotate: 180 }
+                  ]
+              }
+            },
+            { name: 'MA5', type: 'line', data: ma5, xAxisIndex: 0, yAxisIndex: 0, symbol: 'none', lineStyle: { color: '#5470c6', width: 1 }, smooth: true },
+            { name: 'MA10', type: 'line', data: ma10, xAxisIndex: 0, yAxisIndex: 0, symbol: 'none', lineStyle: { color: '#fac858', width: 1 }, smooth: true },
+            { name: 'MA20', type: 'line', data: ma20, xAxisIndex: 0, yAxisIndex: 0, symbol: 'none', lineStyle: { color: '#ee6666', width: 1 }, smooth: true },
+            { name: 'MA60', type: 'line', data: ma60, xAxisIndex: 0, yAxisIndex: 0, symbol: 'none', lineStyle: { color: '#91cc75', width: 1 }, smooth: true },
+            { name: '成交量', type: 'bar', data: volData, xAxisIndex: 1, yAxisIndex: 1,
+              itemStyle: { color: function(p) { return volColors[p.dataIndex]; } } }
+        ]
+    };
+}
+
+klineChart.setOption(buildOption());
+
+// ============================================================
+//  时间范围工具栏
+// ============================================================
+document.querySelectorAll('#range-toolbar button').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('#range-toolbar button').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        var range = this.dataset.range;
+        var total = dates.length;
+        var s = 0, e = 100;
+        if (range === '1m') { s = Math.max(0, (total - 22) / total * 100); e = 100; }
+        else if (range === '3m') { s = Math.max(0, (total - 66) / total * 100); e = 100; }
+        else if (range === '6m') { s = Math.max(0, (total - 132) / total * 100); e = 100; }
+        else if (range === '1y') { s = Math.max(0, (total - 250) / total * 100); e = 100; }
+        klineChart.setOption({
+            dataZoom: [
+                { type: 'inside', xAxisIndex: [0, 1], start: s, end: e },
+                { show: true, xAxisIndex: [0, 1], type: 'slider', bottom: 5, start: s, end: e, showDetail: false }
+            ]
+        });
+    });
+});
+
+window.addEventListener('resize', function() { klineChart.resize(); });
+
+// ============================================================
+//  A/HK 股票切换
+// ============================================================
+function switchStock(stock) {
+    currentStock = stock;
+    setActiveData(stock);
+
+    // 重建MA
+    ma5 = calcMA(ohlc, 5);
+    ma10 = calcMA(ohlc, 10);
+    ma20 = calcMA(ohlc, 20);
+    ma60 = calcMA(ohlc, 60);
+    kdata = ohlc.map(function(d) { return [d[0], d[1], d[2], d[3]]; });
+    volData = volumes.map(function(v) { return v[1]; });
+    volColors = volumes.map(function(v) { return v[2] === 1 ? '#ef5350' : '#26a69a'; });
+
+    // 更新tab样式
+    var tabA = document.getElementById('tab-a');
+    var tabHK = document.getElementById('tab-hk');
+    tabA.className = stock === 'a' ? 'active-a' : '';
+    tabHK.className = stock === 'hk' ? 'active-hk' : '';
+
+    // 更新头部
+    var titleEl = document.getElementById('header-title');
+    var tickerEl = document.getElementById('header-ticker');
+    var chartNameEl = document.getElementById('chart-stock-name');
+    var techLabelEl = document.getElementById('tech-stock-label');
+    if (stock === 'a') {
+        titleEl.innerHTML = '中芯国际 688981.SH <span class="ticker" id="header-ticker">· SMIC · 科创板 半导体晶圆代工</span>';
+        chartNameEl.textContent = '中芯国际 688981.SH';
+        techLabelEl.textContent = 'A股';
+    } else {
+        titleEl.innerHTML = '中芯国际 00981.HK <span class="ticker" id="header-ticker">· SMIC · 港股 半导体晶圆代工</span>';
+        chartNameEl.textContent = '中芯国际 00981.HK (中国香港)';
+        techLabelEl.textContent = '港股';
+    }
+
+    // 更新成交量单位标签
+    document.getElementById('vol-unit-label').textContent = volDisplayUnit;
+
+    // 重绘图表
+    klineChart.setOption(buildOption(), true);
+
+    // 更新头部价格
+    updateHeaderPrice();
+
+    // 更新技术指标
+    updateTechMetrics();
+
+    // 更新AH对比
+    updateAHCompare();
+
+    // 重置时间范围按钮
+    document.querySelectorAll('#range-toolbar button').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelector('#range-toolbar button[data-range="all"]').classList.add('active');
+}
+
+// ============================================================
+//  头部价格显示
+// ============================================================
+function updateHeaderPrice() {
+    var lastIdx = ohlc.length - 1;
+    var lastClose = ohlc[lastIdx][1];
+    var prevClose = lastIdx > 0 ? ohlc[lastIdx - 1][1] : lastClose;
+    var change = lastClose - prevClose;
+    var changePct = prevClose > 0 ? (change / prevClose * 100) : 0;
+    var isUp = change >= 0;
+
+    document.getElementById('live-price').textContent = lastClose.toFixed(2);
+    var chgEl = document.getElementById('live-chg');
+    chgEl.innerHTML = (isUp ? '+' : '') + change.toFixed(2) + ' (' + (isUp ? '+' : '') + changePct.toFixed(2) + '%)';
+    chgEl.className = 'chg ' + (isUp ? 'up' : 'down');
+
+    // 更新数据来源
+    var sourceEl = document.getElementById('data-source');
+    var dateRange = dates[0] + ' ~ ' + dates[dates.length - 1];
+    sourceEl.textContent = '数据来源：Tushare Pro · ' + dateRange + ' · ' + dates.length + '个交易日';
+}
+
+updateHeaderPrice();
+
+// ============================================================
+//  技术指标计算
+// ============================================================
+function updateTechMetrics() {
+    var len = ohlc.length;
+    if (len < 20) return;
+
+    // RSI(14)
+    if (len >= 15) {
+        var gain = 0, loss = 0;
+        for (var ri = len - 14; ri < len; ri++) {
+            var diff = ohlc[ri][1] - ohlc[ri-1][1];
+            if (diff > 0) gain += diff; else loss -= diff;
+        }
+        var avgGain = gain / 14, avgLoss = loss / 14;
+        var rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
+        var rsi = 100 - (100 / (1 + rs));
+        document.getElementById('rsi-val').textContent = rsi.toFixed(2);
+    }
+
+    // MA20 / MA60
+    var m20 = ma20[len - 1], m60 = ma60[len - 1];
+    if (m20) document.getElementById('ma20-val').textContent = '\u00a5' + m20.toFixed(2);
+    if (m60) document.getElementById('ma60-val').textContent = '\u00a5' + m60.toFixed(2);
+
+    // 52周最高
+    var maxHigh = 0;
+    for (var i = Math.max(0, len - 250); i < len; i++) {
+        if (ohlc[i][3] > maxHigh) maxHigh = ohlc[i][3];
+    }
+    document.getElementById('high52-val').textContent = '\u00a5' + maxHigh.toFixed(2);
+
+    // 支撑/阻力 (近120日)
+    var minLow = Infinity, maxAll = 0;
+    for (var j = Math.max(0, len - 120); j < len; j++) {
+        if (ohlc[j][2] < minLow) minLow = ohlc[j][2];
+        if (ohlc[j][3] > maxAll) maxAll = ohlc[j][3];
+    }
+    document.getElementById('sr-val').textContent = '\u00a5' + minLow.toFixed(2) + ' / \u00a5' + maxAll.toFixed(2);
+
+    // 日均成交量
+    var volDivisor = currentStock === 'a' ? 10000 : 10000000;
+    var avgVol = 0, cnt = 0;
+    for (var k = Math.max(0, len - 20); k < len; k++) {
+        avgVol += volData[k]; cnt++;
+    }
+    document.getElementById('avgvol-val').textContent = (avgVol / cnt / volDivisor).toFixed(1);
+
+    // 波动率 (近20日年化)
+    if (len >= 20) {
+        var returns = [];
+        for (var ri = len - 20; ri < len; ri++) {
+            if (ri > 0 && ohlc[ri-1][1] > 0) {
+                returns.push((ohlc[ri][1] - ohlc[ri-1][1]) / ohlc[ri-1][1]);
+            }
+        }
+        if (returns.length > 1) {
+            var mean = returns.reduce(function(a, b) { return a + b; }, 0) / returns.length;
+            var variance = returns.reduce(function(a, b) { return a + Math.pow(b - mean, 2); }, 0) / returns.length;
+            var vol = Math.sqrt(variance) * Math.sqrt(252) * 100;
+            document.getElementById('volatility-val').textContent = vol.toFixed(2) + '%';
+            // 更新波动风险条
+            var volRiskPct = Math.min(95, Math.max(10, vol * 0.8));
+            document.getElementById('risk-volatility-bar').style.width = volRiskPct + '%';
+            if (volRiskPct > 60) document.getElementById('risk-volatility-bar').style.background = '#ff4d4f';
+            else if (volRiskPct > 40) document.getElementById('risk-volatility-bar').style.background = '#faad14';
+            else document.getElementById('risk-volatility-bar').style.background = '#52c41a';
+        }
+    }
+
+    // 均线排列
+    if (m20 && m60) {
+        var alignEl = document.getElementById('ma-align');
+        if (m20 > m60) {
+            alignEl.textContent = '多头排列';
+            alignEl.className = 'metric-value up';
+        } else {
+            alignEl.textContent = '空头排列';
+            alignEl.className = 'metric-value down';
+        }
+    }
+}
+
+updateTechMetrics();
+
+// ============================================================
+//  AH股对比
+// ============================================================
+function updateAHCompare() {
+    var aLast = aOhlc[aOhlc.length - 1][1];
+    var hkLast = hkOhlc[hkOhlc.length - 1][1];
+    var hkCny = hkLast * HK_CNY_RATE;
+    var premium = (aLast - hkCny) / hkCny * 100;
+
+    document.getElementById('ah-a-price').textContent = '\u00a5' + aLast.toFixed(2);
+    document.getElementById('ah-hk-price').textContent = 'HK$' + hkLast.toFixed(2);
+    document.getElementById('ah-hk-cny').textContent = '\u00a5' + hkCny.toFixed(2);
+
+    var premiumEl = document.getElementById('ah-premium');
+    premiumEl.textContent = (premium >= 0 ? '+' : '') + premium.toFixed(2) + '%';
+    premiumEl.className = 'metric-value ' + (premium >= 0 ? 'up' : 'down');
+
+    // 更新估值信息
+    var valEl = document.getElementById('valuation-info');
+    if (premium > 100) {
+        valEl.innerHTML = 'A股较港股溢价 <b style="color:#ff5252">' + premium.toFixed(1) + '%</b> <span class="badge badge-red">高溢价</span>';
+        document.getElementById('risk-valuation-bar').style.width = '85%';
+        document.getElementById('risk-valuation-bar').style.background = '#ff4d4f';
+    } else if (premium > 50) {
+        valEl.innerHTML = 'A股较港股溢价 <b style="color:#fa8c16">' + premium.toFixed(1) + '%</b> <span class="badge badge-orange">中等溢价</span>';
+        document.getElementById('risk-valuation-bar').style.width = '60%';
+        document.getElementById('risk-valuation-bar').style.background = '#faad14';
+    } else if (premium > 0) {
+        valEl.innerHTML = 'A股较港股溢价 <b>' + premium.toFixed(1) + '%</b> <span class="badge badge-blue">低溢价</span>';
+        document.getElementById('risk-valuation-bar').style.width = '35%';
+        document.getElementById('risk-valuation-bar').style.background = '#1890ff';
+    } else {
+        valEl.innerHTML = 'A股较港股折价 <b style="color:#26a69a">' + premium.toFixed(1) + '%</b> <span class="badge badge-green">折价</span>';
+        document.getElementById('risk-valuation-bar').style.width = '15%';
+        document.getElementById('risk-valuation-bar').style.background = '#52c41a';
+    }
+
+    // 流动性风险条 (基于日均成交量)
+    var avgVol = 0, cnt = 0;
+    for (var k = Math.max(0, aOhlc.length - 20); k < aOhlc.length; k++) {
+        avgVol += aVolumes[k][1]; cnt++;
+    }
+    avgVol = avgVol / cnt / 10000; // 万手
+    var liquidityRisk = avgVol < 3 ? 70 : (avgVol < 10 ? 40 : 15);
+    document.getElementById('risk-liquidity-bar').style.width = liquidityRisk + '%';
+    if (liquidityRisk > 50) document.getElementById('risk-liquidity-bar').style.background = '#ff4d4f';
+    else if (liquidityRisk > 30) document.getElementById('risk-liquidity-bar').style.background = '#faad14';
+    else document.getElementById('risk-liquidity-bar').style.background = '#52c41a';
+}
+
+updateAHCompare();
+
+// ============================================================
+//  键盘导航
+// ============================================================
+document.addEventListener('keydown', function(e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var opt = klineChart.getOption();
+    if (!opt.dataZoom || !opt.dataZoom[0]) return;
+    var dz = opt.dataZoom[0];
+    var span = dz.end - dz.start;
+    var step = Math.max(2, span * 0.1);
+    var s, end;
+    if (e.key === 'ArrowRight') {
+        s = Math.min(100 - span, dz.start + step);
+        end = Math.min(100, dz.end + step);
+    } else {
+        s = Math.max(0, dz.start - step);
+        end = Math.max(span, dz.end - step);
+    }
+    klineChart.setOption({
+        dataZoom: [
+            { type: 'inside', xAxisIndex: [0, 1], start: s, end: end },
+            { show: true, xAxisIndex: [0, 1], type: 'slider', bottom: 5, start: s, end: end, showDetail: false }
+        ]
+    });
+});
+</script>
+</body>
+</html>

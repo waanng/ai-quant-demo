@@ -1,0 +1,634 @@
+[
+  {
+    "id": "task1_case_01",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "Quant Stock Dashboard — A-Share vs H · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_01.html",
+    "public_url": "",
+    "topic": "Quant Stock Dashboard — A-Share vs H",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "图表完整",
+      "指标公式清楚",
+      "交互体验好"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_02",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "002747.SZ · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_02.html",
+    "public_url": "",
+    "topic": "002747.SZ",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "指标公式清楚"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_03",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "600519.SH · 分析报告案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_03.html",
+    "public_url": "",
+    "topic": "600519.SH",
+    "tech": [
+      "HTML"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "回测指标完整"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_04",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "中国银行 / 601988 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_04.html",
+    "public_url": "",
+    "topic": "中国银行 / 601988",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "时间区间完整",
+      "图表完整",
+      "指标公式清楚",
+      "可视化实现完整"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_05",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "贵州茅台 / 600519.SH · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_05.html",
+    "public_url": "",
+    "topic": "贵州茅台 / 600519.SH",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "指标公式清楚"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_06",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "688525.SH · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_06.html",
+    "public_url": "",
+    "topic": "688525.SH",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "可视化实现完整"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_07",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "贵州茅台 / 600519.SH · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_07.html",
+    "public_url": "",
+    "topic": "贵州茅台 / 600519.SH",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "可视化实现完整"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_08",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "000725 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_08.html",
+    "public_url": "",
+    "topic": "000725",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_09",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "601226 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_09.html",
+    "public_url": "",
+    "topic": "601226",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "回测指标完整"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_10",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "600900.SH · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_10.html",
+    "public_url": "",
+    "topic": "600900.SH",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "可视化实现完整"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_11",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "002747 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_11.html",
+    "public_url": "",
+    "topic": "002747",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "图表完整",
+      "可视化实现完整"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_12",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "300502 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_12.html",
+    "public_url": "",
+    "topic": "300502",
+    "tech": [
+      "HTML"
+    ],
+    "learning_tags": [
+      "时间区间完整",
+      "图表完整",
+      "指标公式清楚",
+      "回测指标完整"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_13",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "300502.SZ · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_13.html",
+    "public_url": "",
+    "topic": "300502.SZ",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "可视化实现完整"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_14",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "中芯国际 / 688981.SH / 收盘价走势 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_14.html",
+    "public_url": "",
+    "topic": "中芯国际 / 688981.SH / 收盘价走势",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "可视化实现完整"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task1_case_15",
+    "task": "TASK1",
+    "task_title": "量化交易初体验：从零搭建数据引擎",
+    "title": "京东方科技集团股份 / 000725.SZ · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task1/task1_case_15.html",
+    "public_url": "",
+    "topic": "京东方科技集团股份 / 000725.SZ",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品把行情数据获取、股票主题和价格走势展示组织在一个页面里，适合作为数据引擎作业的呈现参考。",
+    "caution": "参考时重点学习数据链路和图表说明，不要只模仿页面样式。"
+  },
+  {
+    "id": "task2_case_01",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "中芯国际 / 688981.SH / RSI / MACD / 布林带 · 分析报告案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_01.html",
+    "public_url": "",
+    "topic": "中芯国际 / 688981.SH / RSI / MACD / 布林带",
+    "tech": [
+      "Chart.js",
+      "Canvas"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "指标公式清楚",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_02",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "RSI / 布林带 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_02.html",
+    "public_url": "",
+    "topic": "RSI / 布林带",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "图表完整",
+      "指标公式清楚",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_03",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "贵州茅台 / 600519.SH / RSI / MACD / 布林带 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_03.html",
+    "public_url": "",
+    "topic": "贵州茅台 / 600519.SH / RSI / MACD / 布林带",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "图表完整",
+      "指标公式清楚",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_04",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "300502 / RSI / MACD · 分析报告案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_04.html",
+    "public_url": "",
+    "topic": "300502 / RSI / MACD",
+    "tech": [
+      "HTML"
+    ],
+    "learning_tags": [
+      "缺失值检查",
+      "描述性统计",
+      "时间区间完整",
+      "图表完整"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_05",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "600900.SH / RSI / MACD · 网页作品案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_05.html",
+    "public_url": "",
+    "topic": "600900.SH / RSI / MACD",
+    "tech": [
+      "HTML"
+    ],
+    "learning_tags": [
+      "描述性统计",
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_06",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "600459.SH / RSI / MACD / 布林带 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_06.html",
+    "public_url": "",
+    "topic": "600459.SH / RSI / MACD / 布林带",
+    "tech": [
+      "Chart.js",
+      "Canvas"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "图表完整",
+      "指标公式清楚",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_07",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "中芯国际 / 688981.SH / RSI · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_07.html",
+    "public_url": "",
+    "topic": "中芯国际 / 688981.SH / RSI",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "指标公式清楚"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_08",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "MACD / 布林带 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_08.html",
+    "public_url": "",
+    "topic": "MACD / 布林带",
+    "tech": [
+      "ECharts",
+      "SVG"
+    ],
+    "learning_tags": [
+      "指标公式清楚",
+      "信号解释到位",
+      "交互体验好",
+      "可视化实现完整"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_09",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "300308.SZ / RSI / MACD / 布林带 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_09.html",
+    "public_url": "",
+    "topic": "300308.SZ / RSI / MACD / 布林带",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "指标公式清楚"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_10",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "中芯国际 / 688981.SH / RSI / MACD / 布林带 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_10.html",
+    "public_url": "",
+    "topic": "中芯国际 / 688981.SH / RSI / MACD / 布林带",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "指标公式清楚"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_11",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "中芯国际 / 688981.SH · 分析报告案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_11.html",
+    "public_url": "",
+    "topic": "中芯国际 / 688981.SH",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "图表完整",
+      "指标公式清楚",
+      "信号解释到位",
+      "可视化实现完整"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_12",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "上海证券 / 600900 / RSI / MACD · 分析报告案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_12.html",
+    "public_url": "",
+    "topic": "上海证券 / 600900 / RSI / MACD",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "缺失值检查",
+      "描述性统计",
+      "数据来源清楚",
+      "时间区间完整"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_13",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "688041 / RSI / MACD / 布林带 · 分析报告案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_13.html",
+    "public_url": "",
+    "topic": "688041 / RSI / MACD / 布林带",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "时间区间完整",
+      "指标公式清楚",
+      "信号解释到位",
+      "可视化实现完整"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_14",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "宝钢股份 / 600019.SH / RSI / MACD / 布林带 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_14.html",
+    "public_url": "",
+    "topic": "宝钢股份 / 600019.SH / RSI / MACD / 布林带",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "指标公式清楚"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  },
+  {
+    "id": "task2_case_15",
+    "task": "TASK2",
+    "task_title": "数据炼金术：数据诊断与构造交易指标",
+    "title": "600498 / RSI / MACD / 布林带 · 网页作品案例",
+    "type": "local_html",
+    "copied_path": "showcases/task2/task2_case_15.html",
+    "public_url": "",
+    "topic": "600498 / RSI / MACD / 布林带",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "时间区间完整",
+      "指标公式清楚",
+      "信号解释到位",
+      "可视化实现完整"
+    ],
+    "why_selected": "这个作品围绕技术指标和图表解释展开，能帮助同学理解数据诊断到指标构造的完整链路。",
+    "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
+  }
+]

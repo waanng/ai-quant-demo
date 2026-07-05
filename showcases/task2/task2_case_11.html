@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KDJ 随机指标分析 — 中芯国际(688981.SH)</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: "Microsoft YaHei", "SimHei", sans-serif; background: #f5f5f5; color: #333; }
+.header { background: linear-gradient(135deg, #1a1a2e, #16213e); color: #fff; padding: 20px 30px; }
+.header h1 { font-size: 22px; margin-bottom: 5px; }
+.header .subtitle { font-size: 13px; opacity: 0.8; }
+.container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+.info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+.info-card { background: #fff; border-radius: 8px; padding: 15px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.info-card .label { font-size: 12px; color: #888; margin-bottom: 5px; }
+.info-card .value { font-size: 20px; font-weight: bold; }
+.info-card .desc { font-size: 11px; color: #aaa; margin-top: 3px; }
+.chart-box { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 20px; }
+.chart-title { font-size: 15px; font-weight: bold; margin-bottom: 10px; padding-left: 10px; border-left: 3px solid #1890ff; }
+#price-chart { width: 100%; height: 320px; }
+#kdj-chart { width: 100%; height: 380px; }
+.formula-box { background: #fff; border-radius: 8px; padding: 25px 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 20px; }
+.formula-box h3 { font-size: 16px; margin-bottom: 15px; color: #1890ff; }
+.formula-box .formula { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; margin: 10px 0; font-family: "Courier New", monospace; font-size: 14px; line-height: 1.8; }
+.formula-box .formula .var { color: #e3302f; font-weight: bold; }
+.formula-box .formula .desc { color: #666; }
+.rules { margin-top: 15px; }
+.rules li { margin: 8px 0; line-height: 1.6; }
+.rules .buy { color: #e3302f; font-weight: bold; }
+.rules .sell { color: #16a34a; font-weight: bold; }
+.signal-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.signal-table th { background: #f0f0f0; padding: 8px 12px; text-align: left; font-size: 13px; }
+.signal-table td { padding: 8px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+.signal-table .golden { color: #e3302f; font-weight: bold; }
+.signal-table .death { color: #16a34a; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>KDJ 随机指标分析</h1>
+  <div class="subtitle">中芯国际 (688981.SH) | 参数: N=9, M1=3, M2=3 | 近120交易日</div>
+</div>
+
+<div class="container">
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="label">最新 K 值</div>
+      <div class="value" id="k-val">--</div>
+      <div class="desc">快速随机线</div>
+    </div>
+    <div class="info-card">
+      <div class="label">最新 D 值</div>
+      <div class="value" id="d-val">--</div>
+      <div class="desc">慢速随机线</div>
+    </div>
+    <div class="info-card">
+      <div class="label">最新 J 值</div>
+      <div class="value" id="j-val">--</div>
+      <div class="desc">方向敏感线</div>
+    </div>
+    <div class="info-card">
+      <div class="label">近120日信号</div>
+      <div class="value" id="signal-count">--</div>
+      <div class="desc">金叉/死叉次数</div>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <div class="chart-title">价格走势 (收盘价)</div>
+    <div id="price-chart"></div>
+  </div>
+
+  <div class="chart-box">
+    <div class="chart-title">KDJ 随机指标 (K/D/J 三线 + 超买超卖区域)</div>
+    <div id="kdj-chart"></div>
+  </div>
+
+  <div class="formula-box">
+    <h3>KDJ 计算公式</h3>
+    <div class="formula">
+<span class="desc">第1步: 计算 RSV (未成熟随机值)</span>
+<span class="var">RSV</span>(n) = (Close - LLV(low, n)) / (HHV(high, n) - LLV(low, n)) × 100
+
+<span class="desc">第2步: SMA 平滑得到 K 值</span>
+<span class="var">K</span> = (M1-1)/M1 × 前日K + 1/M1 × RSV       <span class="desc"># 初始 K=50</span>
+
+<span class="desc">第3步: SMA 平滑得到 D 值</span>
+<span class="var">D</span> = (M2-1)/M2 × 前日D + 1/M2 × K           <span class="desc"># 初始 D=50</span>
+
+<span class="desc">第4步: 计算 J 值 (K/D 的方向放大)</span>
+<span class="var">J</span> = 3 × K - 2 × D                           <span class="desc"># J>100 超买, J<0 超卖</span>
+    </div>
+
+    <h3 style="margin-top: 20px;">研判规则</h3>
+    <ul class="rules">
+      <li><span class="buy">金叉买入</span>: K 线从下方上穿 D 线，且交叉点在 20 以下（超卖区）→ 买入信号更强</li>
+      <li><span class="sell">死叉卖出</span>: K 线从上方下穿 D 线，且交叉点在 80 以上（超买区）→ 卖出信号更强</li>
+      <li><span class="buy">超卖区</span>: K、D < 20，J < 0 → 价格可能过度下跌，存在反弹机会</li>
+      <li><span class="sell">超买区</span>: K、D > 80，J > 100 → 价格可能过度上涨，存在回调风险</li>
+      <li><span class="desc">背离信号</span>: 价格创新高但 KDJ 不创新高（顶背离）→ 趋势可能反转</li>
+    </ul>
+  </div>
+
+  <div class="formula-box">
+    <h3>近120日金叉/死叉信号</h3>
+    <table class="signal-table">
+      <thead>
+        <tr><th>日期</th><th>信号类型</th><th>K值</th><th>D值</th><th>收盘价</th></tr>
+      </thead>
+      <tbody id="signal-table-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const rawData = [{"date": "2025-12-31", "close": 122.83, "high": 126.2, "low": 122.4, "open": 125.99, "vol": 411586.85, "rsv": 71.8, "k": 78.22, "d": 76.34, "j": 81.98}, {"date": "2026-01-05", "close": 129.95, "high": 130.17, "low": 126.2, "open": 126.84, "vol": 911394.04, "rsv": 98.59, "k": 85.01, "d": 79.23, "j": 96.57}, {"date": "2026-01-06", "close": 131.84, "high": 134.2, "low": 128.77, "open": 129.0, "vol": 730696.95, "rsv": 84.45, "k": 84.82, "d": 81.09, "j": 92.28}, {"date": "2026-01-07", "close": 129.98, "high": 132.82, "low": 128.85, "open": 131.84, "vol": 598040.86, "rsv": 67.76, "k": 79.14, "d": 80.44, "j": 76.53}, {"date": "2026-01-08", "close": 130.15, "high": 134.68, "low": 128.91, "open": 128.95, "vol": 616918.81, "rsv": 66.49, "k": 74.92, "d": 78.6, "j": 67.56}, {"date": "2026-01-09", "close": 128.88, "high": 130.01, "low": 127.77, "open": 129.15, "vol": 511274.88, "rsv": 57.1, "k": 68.98, "d": 75.39, "j": 56.15}, {"date": "2026-01-12", "close": 127.66, "high": 129.62, "low": 126.68, "open": 128.52, "vol": 563935.64, "rsv": 44.55, "k": 60.84, "d": 70.54, "j": 41.43}, {"date": "2026-01-13", "close": 123.63, "high": 128.15, "low": 122.86, "open": 127.49, "vol": 652072.8, "rsv": 10.02, "k": 43.9, "d": 61.66, "j": 8.37}, {"date": "2026-01-14", "close": 124.49, "high": 127.6, "low": 123.5, "open": 123.51, "vol": 649683.91, "rsv": 17.02, "k": 34.94, "d": 52.75, "j": -0.69}, {"date": "2026-01-15", "close": 124.44, "high": 125.5, "low": 122.33, "open": 123.49, "vol": 556604.23, "rsv": 17.09, "k": 28.99, "d": 44.83, "j": -2.7}, {"date": "2026-01-16", "close": 126.99, "high": 128.82, "low": 124.88, "open": 127.5, "vol": 756512.57, "rsv": 37.73, "k": 31.9, "d": 40.52, "j": 14.66}, {"date": "2026-01-19", "close": 125.29, "high": 128.5, "low": 125.12, "open": 127.05, "vol": 477537.02, "rsv": 23.97, "k": 29.26, "d": 36.77, "j": 14.24}, {"date": "2026-01-20", "close": 122.18, "high": 125.5, "low": 121.81, "open": 125.0, "vol": 508693.59, "rsv": 2.87, "k": 20.46, "d": 31.33, "j": -1.27}, {"date": "2026-01-21", "close": 127.19, "high": 128.89, "low": 120.58, "open": 120.93, "vol": 970525.21, "rsv": 70.1, "k": 37.01, "d": 33.22, "j": 44.57}, {"date": "2026-01-22", "close": 126.8, "high": 130.82, "low": 125.57, "open": 128.98, "vol": 648094.63, "rsv": 60.74, "k": 44.92, "d": 37.12, "j": 60.51}, {"date": "2026-01-23", "close": 124.96, "high": 127.37, "low": 124.03, "open": 126.8, "vol": 490631.04, "rsv": 42.77, "k": 44.2, "d": 39.48, "j": 53.65}, {"date": "2026-01-26", "close": 121.92, "high": 125.88, "low": 121.9, "open": 124.01, "vol": 502566.5, "rsv": 13.09, "k": 33.83, "d": 37.6, "j": 26.3}, {"date": "2026-01-27", "close": 124.05, "high": 125.74, "low": 119.22, "open": 122.0, "vol": 655261.57, "rsv": 41.64, "k": 36.43, "d": 37.21, "j": 34.88}, {"date": "2026-01-28", "close": 128.55, "high": 128.99, "low": 124.99, "open": 124.99, "vol": 994583.26, "rsv": 80.43, "k": 51.1, "d": 41.84, "j": 69.62}, {"date": "2026-01-29", "close": 122.4, "high": 127.81, "low": 122.16, "open": 127.6, "vol": 715649.35, "rsv": 27.41, "k": 43.2, "d": 42.29, "j": 45.02}, {"date": "2026-01-30", "close": 122.97, "high": 124.94, "low": 120.07, "open": 121.33, "vol": 527719.06, "rsv": 32.33, "k": 39.58, "d": 41.39, "j": 35.96}, {"date": "2026-02-02", "close": 117.06, "high": 122.59, "low": 116.8, "open": 121.4, "vol": 596690.81, "rsv": 1.85, "k": 27.0, "d": 36.59, "j": 7.82}, {"date": "2026-02-03", "close": 116.03, "high": 118.84, "low": 113.46, "open": 118.69, "vol": 561769.52, "rsv": 14.8, "k": 22.94, "d": 32.04, "j": 4.73}, {"date": "2026-02-04", "close": 114.84, "high": 114.99, "low": 113.15, "open": 114.5, "vol": 351393.47, "rsv": 10.67, "k": 18.85, "d": 27.64, "j": 1.26}, {"date": "2026-02-05", "close": 111.8, "high": 114.5, "low": 110.39, "open": 112.99, "vol": 446447.65, "rsv": 7.58, "k": 15.09, "d": 23.46, "j": -1.64}, {"date": "2026-02-06", "close": 112.7, "high": 114.6, "low": 110.14, "open": 110.14, "vol": 408226.91, "rsv": 13.58, "k": 14.59, "d": 20.5, "j": 2.76}, {"date": "2026-02-09", "close": 114.93, "high": 115.07, "low": 113.7, "open": 114.8, "vol": 321018.1, "rsv": 25.41, "k": 18.2, "d": 19.73, "j": 15.12}, {"date": "2026-02-10", "close": 116.2, "high": 116.9, "low": 114.85, "open": 115.2, "vol": 340436.51, "rsv": 34.3, "k": 23.56, "d": 21.01, "j": 28.67}, {"date": "2026-02-11", "close": 115.01, "high": 116.14, "low": 113.5, "open": 114.0, "vol": 345336.73, "rsv": 32.91, "k": 26.68, "d": 22.9, "j": 34.23}, {"date": "2026-02-12", "close": 116.58, "high": 117.18, "low": 115.11, "open": 115.55, "vol": 333622.54, "rsv": 51.73, "k": 35.03, "d": 26.94, "j": 51.2}, {"date": "2026-02-13", "close": 116.93, "high": 117.98, "low": 115.56, "open": 116.23, "vol": 343687.4, "rsv": 78.05, "k": 49.37, "d": 34.42, "j": 79.27}, {"date": "2026-02-24", "close": 115.82, "high": 118.18, "low": 115.62, "open": 118.03, "vol": 276155.68, "rsv": 70.65, "k": 56.46, "d": 41.76, "j": 85.85}, {"date": "2026-02-25", "close": 116.13, "high": 117.5, "low": 115.85, "open": 117.0, "vol": 275528.56, "rsv": 74.5, "k": 62.47, "d": 48.67, "j": 90.09}, {"date": "2026-02-26", "close": 116.65, "high": 117.23, "low": 114.29, "open": 116.13, "vol": 327021.83, "rsv": 80.97, "k": 68.64, "d": 55.32, "j": 95.27}, {"date": "2026-02-27", "close": 115.0, "high": 115.87, "low": 114.32, "open": 115.03, "vol": 279308.78, "rsv": 32.05, "k": 56.44, "d": 55.7, "j": 57.93}, {"date": "2026-03-02", "close": 112.53, "high": 114.2, "low": 112.3, "open": 112.88, "vol": 349784.75, "rsv": 3.91, "k": 38.93, "d": 50.11, "j": 16.58}, {"date": "2026-03-03", "close": 108.31, "high": 114.75, "low": 107.69, "open": 113.23, "vol": 540987.0, "rsv": 5.91, "k": 27.93, "d": 42.71, "j": -1.65}, {"date": "2026-03-04", "close": 106.69, "high": 109.7, "low": 106.12, "open": 107.32, "vol": 322749.58, "rsv": 4.73, "k": 20.19, "d": 35.21, "j": -9.84}, {"date": "2026-03-05", "close": 106.9, "high": 109.26, "low": 106.09, "open": 108.6, "vol": 353531.81, "rsv": 6.7, "k": 15.69, "d": 28.7, "j": -10.32}, {"date": "2026-03-06", "close": 106.5, "high": 108.34, "low": 106.17, "open": 107.0, "vol": 340486.16, "rsv": 3.39, "k": 11.59, "d": 23.0, "j": -11.22}, {"date": "2026-03-09", "close": 105.14, "high": 105.79, "low": 101.63, "open": 103.97, "vol": 393559.67, "rsv": 22.12, "k": 15.1, "d": 20.37, "j": 4.57}, {"date": "2026-03-10", "close": 107.28, "high": 107.75, "low": 105.7, "open": 106.9, "vol": 318321.9, "rsv": 36.22, "k": 22.14, "d": 20.96, "j": 24.5}, {"date": "2026-03-11", "close": 107.1, "high": 108.8, "low": 107.0, "open": 107.23, "vol": 279982.97, "rsv": 38.41, "k": 27.56, "d": 23.16, "j": 36.37}, {"date": "2026-03-12", "close": 106.01, "high": 108.55, "low": 104.95, "open": 107.0, "vol": 288819.77, "rsv": 33.38, "k": 29.5, "d": 25.27, "j": 37.96}, {"date": "2026-03-13", "close": 107.06, "high": 107.83, "low": 104.5, "open": 105.02, "vol": 341633.26, "rsv": 41.39, "k": 33.47, "d": 28.01, "j": 44.39}, {"date": "2026-03-16", "close": 108.6, "high": 110.32, "low": 105.5, "open": 106.31, "vol": 422554.97, "rsv": 80.21, "k": 49.05, "d": 35.02, "j": 77.1}, {"date": "2026-03-17", "close": 106.02, "high": 108.58, "low": 105.99, "open": 108.54, "vol": 295718.04, "rsv": 50.52, "k": 49.54, "d": 39.86, "j": 68.89}, {"date": "2026-03-18", "close": 106.6, "high": 106.88, "low": 105.25, "open": 105.78, "vol": 263345.92, "rsv": 57.19, "k": 52.09, "d": 43.93, "j": 68.4}, {"date": "2026-03-19", "close": 105.96, "high": 107.69, "low": 104.51, "open": 105.01, "vol": 378655.95, "rsv": 49.83, "k": 51.33, "d": 46.4, "j": 61.2}, {"date": "2026-03-20", "close": 102.18, "high": 105.72, "low": 102.18, "open": 105.2, "vol": 381294.75, "rsv": 0.0, "k": 34.22, "d": 42.34, "j": 17.99}, {"date": "2026-03-23", "close": 98.04, "high": 101.99, "low": 97.4, "open": 100.01, "vol": 506671.26, "rsv": 4.95, "k": 24.47, "d": 36.38, "j": 0.63}, {"date": "2026-03-24", "close": 99.25, "high": 99.37, "low": 97.25, "open": 98.9, "vol": 336803.26, "rsv": 15.3, "k": 21.41, "d": 31.39, "j": 1.45}, {"date": "2026-03-25", "close": 99.99, "high": 100.94, "low": 99.28, "open": 99.67, "vol": 321306.43, "rsv": 20.96, "k": 21.26, "d": 28.02, "j": 7.76}, {"date": "2026-03-26", "close": 96.88, "high": 99.7, "low": 96.55, "open": 99.55, "vol": 313198.89, "rsv": 2.4, "k": 14.97, "d": 23.67, "j": -2.42}, {"date": "2026-03-27", "close": 97.5, "high": 98.39, "low": 95.87, "open": 96.0, "vol": 280875.27, "rsv": 12.82, "k": 14.26, "d": 20.53, "j": 1.71}, {"date": "2026-03-30", "close": 95.83, "high": 96.19, "low": 94.0, "open": 95.8, "vol": 328870.03, "rsv": 13.37, "k": 13.96, "d": 18.34, "j": 5.2}, {"date": "2026-03-31", "close": 94.05, "high": 97.4, "low": 94.0, "open": 95.8, "vol": 293839.03, "rsv": 0.37, "k": 9.43, "d": 15.37, "j": -2.45}, {"date": "2026-04-01", "close": 96.33, "high": 96.7, "low": 94.81, "open": 96.4, "vol": 325648.08, "rsv": 19.88, "k": 12.91, "d": 14.55, "j": 9.64}, {"date": "2026-04-02", "close": 93.2, "high": 95.79, "low": 92.51, "open": 95.5, "vol": 293828.32, "rsv": 7.28, "k": 11.03, "d": 13.38, "j": 6.35}, {"date": "2026-04-03", "close": 91.78, "high": 93.94, "low": 91.76, "open": 93.41, "vol": 216461.63, "rsv": 0.22, "k": 7.43, "d": 11.4, "j": -0.5}, {"date": "2026-04-07", "close": 95.62, "high": 96.99, "low": 91.2, "open": 91.5, "vol": 458242.31, "rsv": 45.38, "k": 20.08, "d": 14.29, "j": 31.66}, {"date": "2026-04-08", "close": 101.18, "high": 101.54, "low": 99.02, "open": 99.02, "vol": 544697.12, "rsv": 96.52, "k": 45.56, "d": 24.71, "j": 87.25}, {"date": "2026-04-09", "close": 99.72, "high": 101.2, "low": 99.2, "open": 99.4, "vol": 310716.53, "rsv": 82.4, "k": 57.84, "d": 35.76, "j": 102.01}, {"date": "2026-04-10", "close": 101.01, "high": 102.79, "low": 100.68, "open": 101.0, "vol": 406305.14, "rsv": 84.64, "k": 66.77, "d": 46.09, "j": 108.13}, {"date": "2026-04-13", "close": 100.64, "high": 102.8, "low": 99.72, "open": 99.85, "vol": 351885.22, "rsv": 81.38, "k": 71.64, "d": 54.61, "j": 105.71}, {"date": "2026-04-14", "close": 101.52, "high": 102.28, "low": 100.38, "open": 102.1, "vol": 370910.59, "rsv": 88.97, "k": 77.42, "d": 62.21, "j": 107.82}, {"date": "2026-04-15", "close": 103.91, "high": 106.1, "low": 101.8, "open": 102.05, "vol": 704839.0, "rsv": 85.3, "k": 80.04, "d": 68.16, "j": 103.82}, {"date": "2026-04-16", "close": 104.18, "high": 105.0, "low": 103.0, "open": 103.5, "vol": 393721.35, "rsv": 87.11, "k": 82.4, "d": 72.9, "j": 101.39}, {"date": "2026-04-17", "close": 105.23, "high": 107.3, "low": 103.27, "open": 103.82, "vol": 503755.27, "rsv": 87.14, "k": 83.98, "d": 76.6, "j": 98.75}, {"date": "2026-04-20", "close": 107.96, "high": 108.6, "low": 105.01, "open": 105.93, "vol": 547702.62, "rsv": 93.32, "k": 87.09, "d": 80.1, "j": 101.09}, {"date": "2026-04-21", "close": 107.46, "high": 108.15, "low": 105.68, "open": 107.33, "vol": 372584.25, "rsv": 87.87, "k": 87.35, "d": 82.52, "j": 97.03}, {"date": "2026-04-22", "close": 107.87, "high": 108.08, "low": 106.5, "open": 106.8, "vol": 375216.74, "rsv": 91.78, "k": 88.83, "d": 84.62, "j": 97.25}, {"date": "2026-04-23", "close": 105.98, "high": 109.12, "low": 105.2, "open": 108.88, "vol": 441491.01, "rsv": 66.6, "k": 81.42, "d": 83.55, "j": 77.15}, {"date": "2026-04-24", "close": 110.96, "high": 113.25, "low": 104.61, "open": 105.58, "vol": 910703.63, "rsv": 82.21, "k": 81.68, "d": 82.93, "j": 79.19}, {"date": "2026-04-27", "close": 116.58, "high": 117.69, "low": 112.6, "open": 113.25, "vol": 970295.86, "rsv": 93.01, "k": 85.46, "d": 83.77, "j": 88.83}, {"date": "2026-04-28", "close": 114.0, "high": 117.64, "low": 113.02, "open": 115.24, "vol": 625007.3, "rsv": 74.88, "k": 81.93, "d": 83.16, "j": 79.48}, {"date": "2026-04-29", "close": 112.47, "high": 113.82, "low": 109.78, "open": 113.35, "vol": 514882.54, "rsv": 63.8, "k": 75.89, "d": 80.74, "j": 66.19}, {"date": "2026-04-30", "close": 118.73, "high": 119.88, "low": 113.3, "open": 113.31, "vol": 1018382.85, "rsv": 92.47, "k": 81.42, "d": 80.96, "j": 82.32}, {"date": "2026-05-06", "close": 123.1, "high": 128.12, "low": 121.74, "open": 122.0, "vol": 1292940.51, "rsv": 78.65, "k": 80.49, "d": 80.81, "j": 79.87}, {"date": "2026-05-07", "close": 125.34, "high": 127.48, "low": 122.22, "open": 125.11, "vol": 842774.03, "rsv": 88.18, "k": 83.05, "d": 81.55, "j": 86.05}, {"date": "2026-05-08", "close": 120.31, "high": 123.19, "low": 120.05, "open": 122.9, "vol": 708618.1, "rsv": 66.78, "k": 77.63, "d": 80.25, "j": 72.39}, {"date": "2026-05-11", "close": 122.52, "high": 124.57, "low": 121.9, "open": 122.99, "vol": 814859.72, "rsv": 76.18, "k": 77.15, "d": 79.21, "j": 73.01}, {"date": "2026-05-12", "close": 121.98, "high": 125.44, "low": 120.0, "open": 124.44, "vol": 817732.34, "rsv": 66.52, "k": 73.6, "d": 77.34, "j": 66.13}, {"date": "2026-05-13", "close": 121.86, "high": 122.5, "low": 116.04, "open": 119.0, "vol": 954951.48, "rsv": 65.87, "k": 71.03, "d": 75.24, "j": 62.6}, {"date": "2026-05-14", "close": 117.9, "high": 124.04, "low": 117.0, "open": 121.92, "vol": 790650.15, "rsv": 44.27, "k": 62.11, "d": 70.86, "j": 44.6}, {"date": "2026-05-15", "close": 119.02, "high": 125.0, "low": 118.48, "open": 121.0, "vol": 1328100.54, "rsv": 38.6, "k": 54.27, "d": 65.33, "j": 32.15}, {"date": "2026-05-18", "close": 117.62, "high": 120.34, "low": 115.6, "open": 117.4, "vol": 748969.19, "rsv": 16.13, "k": 41.56, "d": 57.41, "j": 9.86}, {"date": "2026-05-19", "close": 118.82, "high": 118.88, "low": 112.68, "open": 116.16, "vol": 840269.78, "rsv": 41.49, "k": 41.53, "d": 52.12, "j": 20.37}, {"date": "2026-05-20", "close": 133.81, "high": 136.63, "low": 117.5, "open": 118.0, "vol": 2248800.56, "rsv": 88.23, "k": 57.1, "d": 53.78, "j": 63.74}, {"date": "2026-05-21", "close": 127.22, "high": 137.63, "low": 127.1, "open": 134.0, "vol": 1546776.71, "rsv": 58.28, "k": 57.49, "d": 55.01, "j": 62.44}, {"date": "2026-05-22", "close": 131.33, "high": 132.18, "low": 126.5, "open": 129.33, "vol": 1199477.88, "rsv": 74.75, "k": 63.24, "d": 57.76, "j": 74.22}, {"date": "2026-05-25", "close": 156.0, "high": 157.6, "low": 136.0, "open": 136.0, "vol": 2521802.26, "rsv": 96.44, "k": 74.31, "d": 63.27, "j": 96.38}, {"date": "2026-05-26", "close": 149.18, "high": 154.44, "low": 145.5, "open": 150.73, "vol": 1799242.41, "rsv": 81.26, "k": 76.62, "d": 67.72, "j": 94.42}, {"date": "2026-05-27", "close": 146.22, "high": 153.52, "low": 145.0, "open": 150.0, "vol": 1234983.75, "rsv": 74.67, "k": 75.97, "d": 70.47, "j": 86.97}, {"date": "2026-05-28", "close": 153.7, "high": 159.05, "low": 146.0, "open": 146.0, "vol": 1608231.75, "rsv": 88.46, "k": 80.14, "d": 73.69, "j": 93.02}, {"date": "2026-05-29", "close": 139.91, "high": 152.38, "low": 138.49, "open": 150.92, "vol": 1536812.64, "rsv": 58.72, "k": 73.0, "d": 73.46, "j": 72.07}, {"date": "2026-06-01", "close": 132.44, "high": 140.8, "low": 132.04, "open": 139.76, "vol": 1008849.14, "rsv": 35.96, "k": 60.65, "d": 69.19, "j": 43.57}, {"date": "2026-06-02", "close": 132.48, "high": 135.5, "low": 129.3, "open": 132.98, "vol": 923688.2, "rsv": 18.37, "k": 46.56, "d": 61.65, "j": 16.38}, {"date": "2026-06-03", "close": 134.0, "high": 138.75, "low": 131.85, "open": 132.0, "vol": 992127.45, "rsv": 23.04, "k": 38.72, "d": 54.0, "j": 8.15}, {"date": "2026-06-04", "close": 134.88, "high": 137.57, "low": 130.0, "open": 131.0, "vol": 778526.88, "rsv": 18.76, "k": 32.06, "d": 46.69, "j": 2.81}, {"date": "2026-06-05", "close": 127.4, "high": 134.75, "low": 126.7, "open": 131.0, "vol": 934574.33, "rsv": 2.16, "k": 22.1, "d": 38.49, "j": -10.69}, {"date": "2026-06-08", "close": 121.92, "high": 124.28, "low": 120.0, "open": 120.0, "vol": 781225.59, "rsv": 4.92, "k": 16.37, "d": 31.12, "j": -13.13}, {"date": "2026-06-09", "close": 127.3, "high": 128.03, "low": 120.89, "open": 123.5, "vol": 769662.77, "rsv": 18.69, "k": 17.15, "d": 26.46, "j": -1.49}, {"date": "2026-06-10", "close": 125.34, "high": 131.18, "low": 124.5, "open": 125.0, "vol": 669094.14, "rsv": 16.49, "k": 16.93, "d": 23.28, "j": 4.22}, {"date": "2026-06-11", "close": 127.4, "high": 129.08, "low": 123.01, "open": 124.0, "vol": 626275.99, "rsv": 35.58, "k": 23.14, "d": 23.24, "j": 22.96}, {"date": "2026-06-12", "close": 124.88, "high": 134.87, "low": 124.37, "open": 131.64, "vol": 817437.29, "rsv": 26.03, "k": 24.1, "d": 23.53, "j": 25.26}, {"date": "2026-06-15", "close": 130.52, "high": 131.0, "low": 124.89, "open": 128.59, "vol": 728604.09, "rsv": 56.11, "k": 34.77, "d": 27.27, "j": 49.77}, {"date": "2026-06-16", "close": 130.14, "high": 134.34, "low": 127.93, "open": 131.0, "vol": 745583.01, "rsv": 57.71, "k": 42.42, "d": 32.32, "j": 62.61}, {"date": "2026-06-17", "close": 134.7, "high": 134.88, "low": 126.68, "open": 127.91, "vol": 963562.12, "rsv": 98.79, "k": 61.21, "d": 41.95, "j": 99.72}, {"date": "2026-06-18", "close": 140.7, "high": 144.63, "low": 132.88, "open": 136.11, "vol": 1244937.14, "rsv": 84.04, "k": 68.82, "d": 50.91, "j": 104.65}, {"date": "2026-06-22", "close": 145.59, "high": 148.0, "low": 140.0, "open": 140.78, "vol": 1060960.58, "rsv": 91.11, "k": 76.25, "d": 59.36, "j": 110.04}, {"date": "2026-06-23", "close": 141.7, "high": 148.3, "low": 139.6, "open": 143.58, "vol": 918201.09, "rsv": 73.9, "k": 75.47, "d": 64.73, "j": 96.95}, {"date": "2026-06-24", "close": 151.53, "high": 156.35, "low": 141.32, "open": 141.5, "vol": 1411623.83, "rsv": 85.54, "k": 78.83, "d": 69.43, "j": 97.63}, {"date": "2026-06-25", "close": 156.86, "high": 158.66, "low": 151.0, "open": 152.0, "vol": 1186102.37, "rsv": 94.75, "k": 84.13, "d": 74.33, "j": 103.75}, {"date": "2026-06-26", "close": 148.76, "high": 156.22, "low": 146.5, "open": 153.7, "vol": 1076155.43, "rsv": 70.68, "k": 79.65, "d": 76.1, "j": 86.75}, {"date": "2026-06-29", "close": 151.0, "high": 152.99, "low": 141.0, "open": 147.8, "vol": 1027401.01, "rsv": 76.05, "k": 78.45, "d": 76.89, "j": 81.58}, {"date": "2026-06-30", "close": 158.82, "high": 160.66, "low": 150.0, "open": 152.05, "vol": 1066795.41, "rsv": 94.59, "k": 83.83, "d": 79.2, "j": 93.09}, {"date": "2026-07-01", "close": 154.48, "high": 166.88, "low": 152.31, "open": 160.19, "vol": 1146777.18, "rsv": 63.53, "k": 77.06, "d": 78.49, "j": 74.21}, {"date": "2026-07-02", "close": 144.1, "high": 151.69, "low": 141.26, "open": 146.5, "vol": 949023.64, "rsv": 16.5, "k": 56.87, "d": 71.28, "j": 28.05}, {"date": "2026-07-03", "close": 140.31, "high": 146.45, "low": 140.2, "open": 144.89, "vol": 770411.78, "rsv": 2.6, "k": 38.78, "d": 60.45, "j": -4.55}];
+const signals = [{"date": "2026-01-07", "type": "death", "idx": 3, "k": 79.14, "d": 80.44, "close": 129.98}, {"date": "2026-01-21", "type": "golden", "idx": 13, "k": 37.01, "d": 33.22, "close": 127.19}, {"date": "2026-01-26", "type": "death", "idx": 16, "k": 33.83, "d": 37.6, "close": 121.92}, {"date": "2026-01-28", "type": "golden", "idx": 18, "k": 51.1, "d": 41.84, "close": 128.55}, {"date": "2026-01-30", "type": "death", "idx": 20, "k": 39.58, "d": 41.39, "close": 122.97}, {"date": "2026-02-10", "type": "golden", "idx": 27, "k": 23.56, "d": 21.01, "close": 116.2}, {"date": "2026-03-02", "type": "death", "idx": 35, "k": 38.93, "d": 50.11, "close": 112.53}, {"date": "2026-03-10", "type": "golden", "idx": 41, "k": 22.14, "d": 20.96, "close": 107.28}, {"date": "2026-03-20", "type": "death", "idx": 49, "k": 34.22, "d": 42.34, "close": 102.18}, {"date": "2026-04-07", "type": "golden", "idx": 60, "k": 20.08, "d": 14.29, "close": 95.62}, {"date": "2026-04-23", "type": "death", "idx": 72, "k": 81.42, "d": 83.55, "close": 105.98}, {"date": "2026-04-27", "type": "golden", "idx": 74, "k": 85.46, "d": 83.77, "close": 116.58}, {"date": "2026-04-28", "type": "death", "idx": 75, "k": 81.93, "d": 83.16, "close": 114.0}, {"date": "2026-04-30", "type": "golden", "idx": 77, "k": 81.42, "d": 80.96, "close": 118.73}, {"date": "2026-05-06", "type": "death", "idx": 78, "k": 80.49, "d": 80.81, "close": 123.1}, {"date": "2026-05-07", "type": "golden", "idx": 79, "k": 83.05, "d": 81.55, "close": 125.34}, {"date": "2026-05-08", "type": "death", "idx": 80, "k": 77.63, "d": 80.25, "close": 120.31}, {"date": "2026-05-20", "type": "golden", "idx": 88, "k": 57.1, "d": 53.78, "close": 133.81}, {"date": "2026-05-29", "type": "death", "idx": 95, "k": 73.0, "d": 73.46, "close": 139.91}, {"date": "2026-06-12", "type": "golden", "idx": 105, "k": 24.1, "d": 23.53, "close": 124.88}, {"date": "2026-07-01", "type": "death", "idx": 117, "k": 77.06, "d": 78.49, "close": 154.48}];
+const dates = rawData.map(d => d.date);
+const closes = rawData.map(d => d.close);
+const kLine = rawData.map(d => d.k);
+const dLine = rawData.map(d => d.d);
+const jLine = rawData.map(d => d.j);
+
+// 更新信息卡片
+document.getElementById('k-val').textContent = kLine[kLine.length-1].toFixed(2);
+document.getElementById('d-val').textContent = dLine[dLine.length-1].toFixed(2);
+document.getElementById('j-val').textContent = jLine[jLine.length-1].toFixed(2);
+const golden = signals.filter(s => s.type === 'golden').length;
+const death = signals.filter(s => s.type === 'death').length;
+document.getElementById('signal-count').textContent = golden + '金/' + death + '死';
+
+// 信号表
+const tbody = document.getElementById('signal-table-body');
+signals.forEach(s => {
+  const tr = document.createElement('tr');
+  const cls = s.type === 'golden' ? 'golden' : 'death';
+  const label = s.type === 'golden' ? '金叉 ↗' : '死叉 ↘';
+  tr.innerHTML = '<td>' + s.date + '</td><td class="' + cls + '">' + label + '</td><td>' + s.k + '</td><td>' + s.d + '</td><td>¥' + s.close + '</td>';
+  tbody.appendChild(tr);
+});
+
+// 信号标注点
+const goldenPoints = signals.filter(s => s.type === 'golden').map(s => ({
+  coord: [s.date, s.k], itemStyle: { color: '#e3302f' },
+  label: { show: true, formatter: '金叉', fontSize: 10, color: '#e3302f', position: 'bottom' }
+}));
+const deathPoints = signals.filter(s => s.type === 'death').map(s => ({
+  coord: [s.date, s.k], itemStyle: { color: '#16a34a' },
+  label: { show: true, formatter: '死叉', fontSize: 10, color: '#16a34a', position: 'top' }
+}));
+
+// === 价格图 ===
+const priceChart = echarts.init(document.getElementById('price-chart'));
+priceChart.setOption({
+  tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+  grid: { left: 60, right: 30, top: 20, bottom: 60 },
+  xAxis: { type: 'category', data: dates, axisLabel: { fontSize: 10, rotate: 0 } },
+  yAxis: { type: 'value', name: '价格(¥)', scale: true, axisLabel: { fontSize: 10 } },
+  dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', bottom: 10, height: 20 }],
+  series: [{
+    name: '收盘价', type: 'line', data: closes,
+    smooth: true, symbol: 'none', lineStyle: { width: 1.5, color: '#1890ff' },
+    areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [
+      { offset: 0, color: 'rgba(24,144,255,0.15)' }, { offset: 1, color: 'rgba(24,144,255,0)' }
+    ]}}
+  }]
+});
+
+// === KDJ 图 ===
+const kdjChart = echarts.init(document.getElementById('kdj-chart'));
+kdjChart.setOption({
+  tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+  legend: { data: ['K', 'D', 'J'], top: 5, textStyle: { fontSize: 12 } },
+  grid: { left: 60, right: 30, top: 40, bottom: 60 },
+  xAxis: { type: 'category', data: dates, axisLabel: { fontSize: 10 } },
+  yAxis: { type: 'value', name: 'KDJ值', min: -20, max: 120, axisLabel: { fontSize: 10 },
+    splitLine: { show: true, lineStyle: { type: 'dashed', color: '#eee' } }
+  },
+  dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', bottom: 10, height: 20 }],
+  series: [
+    {
+      name: 'K', type: 'line', data: kLine, symbol: 'none',
+      lineStyle: { width: 1.5, color: '#1890ff' },
+      markLine: { silent: true, symbol: 'none', lineStyle: { type: 'dashed' },
+        data: [{ yAxis: 80, lineStyle: { color: '#e3302f' }, label: { formatter: '超买 80', fontSize: 10, color: '#e3302f' }},
+               { yAxis: 20, lineStyle: { color: '#16a34a' }, label: { formatter: '超卖 20', fontSize: 10, color: '#16a34a' }},
+               { yAxis: 50, lineStyle: { color: '#ccc' }, label: { formatter: '中轴 50', fontSize: 10, color: '#999' }}]
+      },
+      markPoint: { data: [...goldenPoints, ...deathPoints], symbolSize: 8 }
+    },
+    { name: 'D', type: 'line', data: dLine, symbol: 'none', lineStyle: { width: 1.5, color: '#fa8c16' } },
+    { name: 'J', type: 'line', data: jLine, symbol: 'none', lineStyle: { width: 1.5, color: '#722ed1' } },
+  ]
+});
+
+window.addEventListener('resize', () => { priceChart.resize(); kdjChart.resize(); });
+</script>
+</body>
+</html>

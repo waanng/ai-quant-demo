@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>股票技术指标交互分析工具</title>
+  <style>
+    /* ========== 基础重置和主题变量 ========== */
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent-blue: #58a6ff;
+      --accent-orange: #f78166;
+      --accent-green: #3fb950;
+      --accent-purple: #bc8cff;
+      --accent-red: #ef4444;
+      --accent-green-bull: #22c55e;
+      --accent-yellow: #e3b341;
+      --input-bg: #0d1117;
+      --slider-track: #30363d;
+      --radius: 6px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ========== 整体布局 ========== */
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ========== 左侧面板 ========== */
+    .sidebar {
+      width: 280px;
+      min-width: 280px;
+      background: var(--panel);
+      border-right: 1px solid var(--panel-border);
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: var(--panel-border);
+      border-radius: 3px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--panel-border);
+    }
+
+    /* ========== 文件选择 ========== */
+    .file-btn-wrap {
+      position: relative;
+    }
+
+    .file-btn-wrap input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .file-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 10px 16px;
+      background: var(--input-bg);
+      border: 1px dashed var(--panel-border);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .file-btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .file-btn svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .load-status {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      min-height: 18px;
+      transition: color 0.2s;
+    }
+
+    .load-status.success {
+      color: var(--accent-green);
+    }
+
+    .load-status.error {
+      color: var(--accent-red);
+    }
+
+    .data-info {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--input-bg);
+      padding: 6px 10px;
+      border-radius: var(--radius);
+      border: 1px solid var(--panel-border);
+      margin-top: 4px;
+      word-break: break-all;
+    }
+
+    /* ========== 股票选择下拉框 ========== */
+    .stock-select {
+      width: 100%;
+      padding: 8px 10px;
+      background: var(--input-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .stock-select:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .stock-select option {
+      background: var(--panel);
+      color: var(--text);
+    }
+
+    /* ========== 指标开关 ========== */
+    .indicator-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .indicator-toggle input[type="checkbox"] {
+      display: none;
+    }
+
+    .indicator-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .indicator-dot.blue { background: var(--accent-blue); }
+    .indicator-dot.orange { background: var(--accent-orange); }
+    .indicator-dot.green { background: var(--accent-green); }
+    .indicator-dot.purple { background: var(--accent-purple); }
+
+    .indicator-check {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--panel-border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .indicator-toggle input:checked + .indicator-dot + .indicator-check {
+      border-color: var(--accent-blue);
+      background: var(--accent-blue);
+    }
+
+    .indicator-check svg {
+      width: 12px;
+      height: 12px;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .indicator-toggle input:checked + .indicator-dot + .indicator-check svg {
+      opacity: 1;
+    }
+
+    .indicator-label {
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    /* ========== 参数面板 ========== */
+    .param-group {
+      margin-top: 6px;
+      padding: 8px 10px;
+      background: var(--input-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .param-group.hidden {
+      display: none;
+    }
+
+    .param-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .param-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      min-width: 50px;
+      flex-shrink: 0;
+    }
+
+    .param-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--slider-track);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .param-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      cursor: pointer;
+      transition: box-shadow 0.15s;
+    }
+
+    .param-slider::-webkit-slider-thumb:hover {
+      box-shadow: 0 0 0 4px rgba(88,166,255,0.2);
+    }
+
+    .param-slider::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      border: none;
+      cursor: pointer;
+    }
+
+    .param-value {
+      font-size: 12px;
+      color: var(--accent-blue);
+      font-weight: 600;
+      min-width: 28px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* MA 类型下拉 */
+    .param-select {
+      flex: 1;
+      padding: 4px 8px;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 4px;
+      color: var(--text);
+      font-size: 12px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .param-select:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .param-select option {
+      background: var(--panel);
+    }
+
+    /* ========== 右侧主区域 ========== */
+    .main-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    /* 顶部股票信息栏 */
+    .stock-header {
+      padding: 14px 20px;
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      border-bottom: 1px solid var(--panel-border);
+      background: var(--panel);
+      flex-wrap: wrap;
+    }
+
+    .stock-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .stock-price {
+      font-size: 24px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stock-price.up { color: var(--accent-red); }
+    .stock-price.down { color: var(--accent-green-bull); }
+    .stock-price.neutral { color: var(--text-muted); }
+
+    .stock-change {
+      font-size: 14px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stock-change.up { color: var(--accent-red); }
+    .stock-change.down { color: var(--accent-green-bull); }
+
+    /* 图表容器区域 */
+    .charts-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 12px;
+      gap: 8px;
+    }
+
+    .chart-container {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+    }
+
+    .chart-container.main {
+      flex: 4;
+      min-height: 450px;
+    }
+
+    .chart-container .chart-wrap {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* 子图容器 */
+    .sub-charts {
+      display: flex;
+      flex-direction: column;
+      flex: 3;
+      min-height: 0;
+    }
+
+    .sub-chart-container {
+      flex: 1;
+      min-height: 200px;
+      border-top: 1px solid var(--panel-border);
+      position: relative;
+      display: none;
+    }
+
+    .sub-chart-container.visible {
+      display: block;
+    }
+
+    .sub-chart-container .chart-wrap {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* 空状态提示 */
+    .empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      gap: 12px;
+    }
+
+    .empty-state svg {
+      width: 64px;
+      height: 64px;
+      opacity: 0.3;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+    }
+
+    /* ========== 响应式 ========== */
+    @media (max-width: 768px) {
+      .app-container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        min-width: auto;
+        max-height: 45vh;
+        border-right: none;
+        border-bottom: 1px solid var(--panel-border);
+      }
+
+      .stock-header {
+        padding: 10px 14px;
+        gap: 10px;
+      }
+
+      .stock-name {
+        font-size: 16px;
+      }
+
+      .stock-price {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- ========== 左侧面板 ========== -->
+  <aside class="sidebar">
+
+    <!-- 数据源 -->
+    <div class="panel-section">
+      <div class="section-title">数据源</div>
+      <div class="file-btn-wrap">
+        <div class="file-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <span>选择 JSON 数据文件</span>
+        </div>
+        <input type="file" id="file-input" accept=".json">
+      </div>
+      <div class="load-status" id="load-status">尚未加载文件</div>
+      <div class="data-info" id="data-info" style="display:none;"></div>
+    </div>
+
+    <!-- 股票选择 -->
+    <div class="panel-section" id="stock-select-section" style="display:none;">
+      <div class="section-title">股票选择</div>
+      <select class="stock-select" id="stock-select"></select>
+    </div>
+
+    <!-- 指标开关 -->
+    <div class="panel-section">
+      <div class="section-title">技术指标</div>
+
+      <!-- MA -->
+      <label class="indicator-toggle">
+        <input type="checkbox" id="toggle-ma" checked>
+        <span class="indicator-dot blue"></span>
+        <span class="indicator-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </span>
+        <span class="indicator-label">移动平均线 MA</span>
+      </label>
+
+      <!-- MA 参数 -->
+      <div class="param-group" id="params-ma">
+        <div class="param-row">
+          <span class="param-label">短期</span>
+          <input type="range" class="param-slider" id="ma-short" min="2" max="20" value="5" step="1">
+          <span class="param-value" id="ma-short-val">5</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">中期</span>
+          <input type="range" class="param-slider" id="ma-mid" min="10" max="60" value="20" step="1">
+          <span class="param-value" id="ma-mid-val">20</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">长期</span>
+          <input type="range" class="param-slider" id="ma-long" min="30" max="120" value="60" step="1">
+          <span class="param-value" id="ma-long-val">60</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">类型</span>
+          <select class="param-select" id="ma-type">
+            <option value="SMA">SMA</option>
+            <option value="EMA">EMA</option>
+            <option value="WMA">WMA</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- MACD -->
+      <label class="indicator-toggle">
+        <input type="checkbox" id="toggle-macd">
+        <span class="indicator-dot orange"></span>
+        <span class="indicator-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </span>
+        <span class="indicator-label">MACD</span>
+      </label>
+
+      <!-- MACD 参数 -->
+      <div class="param-group hidden" id="params-macd">
+        <div class="param-row">
+          <span class="param-label">快线</span>
+          <input type="range" class="param-slider" id="macd-fast" min="5" max="30" value="12" step="1">
+          <span class="param-value" id="macd-fast-val">12</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">慢线</span>
+          <input type="range" class="param-slider" id="macd-slow" min="15" max="60" value="26" step="1">
+          <span class="param-value" id="macd-slow-val">26</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">信号线</span>
+          <input type="range" class="param-slider" id="macd-signal" min="3" max="20" value="9" step="1">
+          <span class="param-value" id="macd-signal-val">9</span>
+        </div>
+      </div>
+
+      <!-- 布林带 -->
+      <label class="indicator-toggle">
+        <input type="checkbox" id="toggle-bollinger">
+        <span class="indicator-dot green"></span>
+        <span class="indicator-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </span>
+        <span class="indicator-label">布林带</span>
+      </label>
+
+      <!-- 布林带参数 -->
+      <div class="param-group hidden" id="params-bollinger">
+        <div class="param-row">
+          <span class="param-label">中轨</span>
+          <input type="range" class="param-slider" id="boll-period" min="5" max="60" value="20" step="1">
+          <span class="param-value" id="boll-period-val">20</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">标准差</span>
+          <input type="range" class="param-slider" id="boll-mult" min="0.5" max="4.0" value="2.0" step="0.1">
+          <span class="param-value" id="boll-mult-val">2.0</span>
+        </div>
+      </div>
+
+      <!-- 波动率 -->
+      <label class="indicator-toggle">
+        <input type="checkbox" id="toggle-volatility">
+        <span class="indicator-dot purple"></span>
+        <span class="indicator-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </span>
+        <span class="indicator-label">波动率</span>
+      </label>
+
+      <!-- 波动率参数 -->
+      <div class="param-group hidden" id="params-volatility">
+        <div class="param-row">
+          <span class="param-label">HV周期</span>
+          <input type="range" class="param-slider" id="vol-hv" min="5" max="60" value="20" step="1">
+          <span class="param-value" id="vol-hv-val">20</span>
+        </div>
+        <div class="param-row">
+          <span class="param-label">ATR周期</span>
+          <input type="range" class="param-slider" id="vol-atr" min="5" max="30" value="14" step="1">
+          <span class="param-value" id="vol-atr-val">14</span>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ========== 右侧主区域 ========== -->
+  <main class="main-area">
+
+    <!-- 顶部股票信息 -->
+    <div class="stock-header" id="stock-header" style="display:none;">
+      <span class="stock-name" id="header-name">--</span>
+      <span class="stock-price neutral" id="header-price">--</span>
+      <span class="stock-change" id="header-change">--</span>
+    </div>
+
+    <!-- 图表区域 -->
+    <div class="charts-area" id="charts-area">
+      <!-- 空状态 -->
+      <div class="empty-state" id="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 3v18h18"/>
+          <path d="M7 16l4-8 4 4 4-6"/>
+        </svg>
+        <p>请选择 JSON 数据文件以开始分析</p>
+      </div>
+
+      <!-- 主图 -->
+      <div class="chart-container main" id="main-container" style="display:none;">
+        <div class="chart-wrap" id="main-chart"></div>
+      </div>
+
+      <!-- 子图区域 -->
+      <div class="sub-charts" id="sub-charts" style="display:none;">
+        <div class="sub-chart-container" id="macd-container">
+          <div class="chart-wrap" id="macd-chart"></div>
+        </div>
+        <div class="sub-chart-container" id="bollinger-container">
+          <div class="chart-wrap" id="bollinger-chart"></div>
+        </div>
+        <div class="sub-chart-container" id="volatility-container">
+          <div class="chart-wrap" id="volatility-chart"></div>
+        </div>
+        <div class="sub-chart-container" id="volume-container">
+          <div class="chart-wrap" id="volume-chart"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ECharts 库 -->
+<script src="_shared/js/echarts.min.js"></script>
+
+<!-- 业务模块 -->
+<script src="assets/indicator-calculator.js"></script>
+<script src="assets/data-loader.js"></script>
+<script src="assets/charts-manager.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  // ========== 全局状态 ==========
+  var state = {
+    loaded: false,           // 是否已加载数据
+    stocks: [],              // 所有可用的股票数据集 [{name, code, data}, ...]
+    currentStockIdx: 0,       // 当前选中的股票索引
+    currentData: null         // 当前选中股票的K线数据
+  };
+
+  // ========== DOM 元素缓存 ==========
+  var $fileInput = document.getElementById('file-input');
+  var $loadStatus = document.getElementById('load-status');
+  var $dataInfo = document.getElementById('data-info');
+  var $stockSelectSection = document.getElementById('stock-select-section');
+  var $stockSelect = document.getElementById('stock-select');
+  var $headerName = document.getElementById('header-name');
+  var $headerPrice = document.getElementById('header-price');
+  var $headerChange = document.getElementById('header-change');
+  var $stockHeader = document.getElementById('stock-header');
+  var $emptyState = document.getElementById('empty-state');
+  var $mainContainer = document.getElementById('main-container');
+  var $subCharts = document.getElementById('sub-charts');
+
+  // 指标开关
+  var $toggleMA = document.getElementById('toggle-ma');
+  var $toggleMACD = document.getElementById('toggle-macd');
+  var $toggleBollinger = document.getElementById('toggle-bollinger');
+  var $toggleVolatility = document.getElementById('toggle-volatility');
+
+  // 参数面板
+  var $paramsMA = document.getElementById('params-ma');
+  var $paramsMACD = document.getElementById('params-macd');
+  var $paramsBollinger = document.getElementById('params-bollinger');
+  var $paramsVolatility = document.getElementById('params-volatility');
+
+  // 滑块和数值显示
+  var sliders = {
+    'ma-short': { el: document.getElementById('ma-short'), display: document.getElementById('ma-short-val') },
+    'ma-mid': { el: document.getElementById('ma-mid'), display: document.getElementById('ma-mid-val') },
+    'ma-long': { el: document.getElementById('ma-long'), display: document.getElementById('ma-long-val') },
+    'macd-fast': { el: document.getElementById('macd-fast'), display: document.getElementById('macd-fast-val') },
+    'macd-slow': { el: document.getElementById('macd-slow'), display: document.getElementById('macd-slow-val') },
+    'macd-signal': { el: document.getElementById('macd-signal'), display: document.getElementById('macd-signal-val') },
+    'boll-period': { el: document.getElementById('boll-period'), display: document.getElementById('boll-period-val') },
+    'boll-mult': { el: document.getElementById('boll-mult'), display: document.getElementById('boll-mult-val') },
+    'vol-hv': { el: document.getElementById('vol-hv'), display: document.getElementById('vol-hv-val') },
+    'vol-atr': { el: document.getElementById('vol-atr'), display: document.getElementById('vol-atr-val') }
+  };
+
+  // 子图容器
+  var subChartMap = {
+    macd: document.getElementById('macd-container'),
+    bollinger: document.getElementById('bollinger-container'),
+    volatility: document.getElementById('volatility-container'),
+    volume: document.getElementById('volume-container')
+  };
+
+  // ========== 工具函数 ==========
+
+  /**
+   * 防抖函数
+   */
+  function debounce(fn, delay) {
+    var timer = null;
+    return function () {
+      var ctx = this;
+      var args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        fn.apply(ctx, args);
+      }, delay);
+    };
+  }
+
+  /**
+   * 读取当前所有参数
+   */
+  function getParams() {
+    return {
+      ma: {
+        enabled: $toggleMA.checked,
+        type: document.getElementById('ma-type').value,
+        short: parseInt(sliders['ma-short'].el.value),
+        mid: parseInt(sliders['ma-mid'].el.value),
+        long: parseInt(sliders['ma-long'].el.value)
+      },
+      macd: {
+        enabled: $toggleMACD.checked,
+        fast: parseInt(sliders['macd-fast'].el.value),
+        slow: parseInt(sliders['macd-slow'].el.value),
+        signal: parseInt(sliders['macd-signal'].el.value)
+      },
+      bollinger: {
+        enabled: $toggleBollinger.checked,
+        period: parseInt(sliders['boll-period'].el.value),
+        mult: parseFloat(sliders['boll-mult'].el.value)
+      },
+      volatility: {
+        enabled: $toggleVolatility.checked,
+        hvPeriod: parseInt(sliders['vol-hv'].el.value),
+        atrPeriod: parseInt(sliders['vol-atr'].el.value)
+      }
+    };
+  }
+
+  /**
+   * 更新滑块数值显示
+   */
+  function updateSliderDisplay(key) {
+    var s = sliders[key];
+    if (s) {
+      var val = s.el.value;
+      // 标准差倍数保留1位小数
+      if (key === 'boll-mult') {
+        s.display.textContent = parseFloat(val).toFixed(1);
+      } else {
+        s.display.textContent = val;
+      }
+    }
+  }
+
+  /**
+   * 更新顶部股票信息栏
+   */
+  function updateStockHeader(stock, data) {
+    if (!data || data.length === 0) return;
+
+    var lastRec = data[data.length - 1];
+    var firstRec = data[0];
+    var price = lastRec.close;
+    var firstPrice = firstRec.close;
+
+    $headerName.textContent = stock.name;
+    $headerPrice.textContent = price.toFixed(2);
+
+    // 区间涨跌幅
+    if (firstPrice > 0) {
+      var change = price - firstPrice;
+      var pctChange = (change / firstPrice) * 100;
+      var isUp = change >= 0;
+      var sign = isUp ? '+' : '';
+
+      $headerPrice.className = 'stock-price ' + (isUp ? 'up' : (change < 0 ? 'down' : 'neutral'));
+      $headerChange.className = 'stock-change ' + (isUp ? 'up' : 'down');
+      $headerChange.textContent = sign + change.toFixed(2) + ' (' + sign + pctChange.toFixed(2) + '%)';
+    } else {
+      $headerPrice.className = 'stock-price neutral';
+      $headerChange.textContent = '--';
+      $headerChange.className = 'stock-change';
+    }
+
+    $stockHeader.style.display = 'flex';
+  }
+
+  /**
+   * 控制子图的显示/隐藏
+   */
+  function toggleSubCharts() {
+    var p = getParams();
+
+    // 成交量始终显示（加载数据后）
+    var hasVolume = state.loaded && state.currentData;
+    subChartMap.volume.className = 'sub-chart-container' + (hasVolume ? ' visible' : '');
+
+    // 其他子图根据开关控制
+    subChartMap.macd.className = 'sub-chart-container' + (p.macd.enabled ? ' visible' : '');
+    subChartMap.bollinger.className = 'sub-chart-container' + (p.bollinger.enabled ? ' visible' : '');
+    subChartMap.volatility.className = 'sub-chart-container' + (p.volatility.enabled ? ' visible' : '');
+  }
+
+  // ========== 核心计算和绘图 ==========
+
+  /**
+   * 重新计算所有指标并更新所有图表
+   */
+  function refreshAll() {
+    var data = state.currentData;
+    if (!data || data.length === 0) return;
+
+    var p = getParams();
+    var dates = data.map(function (d) { return d.date_formatted || d.trade_date; });
+
+    // 更新股票信息
+    updateStockHeader(state.stocks[state.currentStockIdx], data);
+
+    // 主图（K线 + MA）
+    ChartsManager.updateMainChart(data, p.ma);
+
+    // 成交量
+    ChartsManager.updateVolumeChart(data);
+
+    // MACD
+    if (p.macd.enabled) {
+      var macdData = IndicatorCalculator.calcMACD(data, p.macd.fast, p.macd.slow, p.macd.signal);
+      ChartsManager.updateMACDChart(macdData, dates);
+    }
+
+    // 布林带
+    if (p.bollinger.enabled) {
+      var bollingerData = IndicatorCalculator.calcBollingerBands(data, p.bollinger.period, p.bollinger.mult);
+      ChartsManager.updateBollingerChart(bollingerData, dates);
+    }
+
+    // 波动率
+    if (p.volatility.enabled) {
+      var volData = IndicatorCalculator.calcVolatility(data, p.volatility.hvPeriod, p.volatility.atrPeriod);
+      ChartsManager.updateVolatilityChart(volData, dates);
+    }
+
+    // 控制子图显隐
+    toggleSubCharts();
+  }
+
+  /**
+   * 防抖版刷新
+   */
+  var debouncedRefresh = debounce(refreshAll, 100);
+
+  // ========== 事件绑定 ==========
+
+  /**
+   * 文件选择事件
+   */
+  $fileInput.addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+
+    $loadStatus.textContent = '正在加载 ' + file.name + ' ...';
+    $loadStatus.className = 'load-status';
+
+    DataLoader.loadFile(file).then(function (result) {
+      state.loaded = true;
+      state.stocks = result.stocks;
+      state.currentStockIdx = 0;
+      state.currentData = result.stocks[0].data;
+
+      // 更新状态提示
+      $loadStatus.textContent = '已加载: ' + file.name;
+      $loadStatus.className = 'load-status success';
+
+      // 显示数据集信息
+      var infoHtml = '共 ' + result.stocks.length + ' 个数据集';
+      for (var i = 0; i < result.stocks.length; i++) {
+        infoHtml += '<br>' + (i + 1) + '. ' + result.stocks[i].name + ' (' + result.stocks[i].data.length + ' 条)';
+      }
+      $dataInfo.innerHTML = infoHtml;
+      $dataInfo.style.display = 'block';
+
+      // 填充股票选择下拉框
+      $stockSelect.innerHTML = '';
+      for (var i = 0; i < result.stocks.length; i++) {
+        var opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = result.stocks[i].name;
+        $stockSelect.appendChild(opt);
+      }
+      $stockSelectSection.style.display = 'block';
+
+      // 初始化图表（如果尚未初始化）
+      if (!ChartsManager.initCharts._called) {
+        ChartsManager.initCharts();
+        ChartsManager.initCharts._called = true;
+      }
+
+      // 显示图表区域，隐藏空状态
+      $emptyState.style.display = 'none';
+      $mainContainer.style.display = 'block';
+      $subCharts.style.display = 'flex';
+
+      // 首次绘制
+      refreshAll();
+
+    }).catch(function (err) {
+      $loadStatus.textContent = '加载失败: ' + err.message;
+      $loadStatus.className = 'load-status error';
+      console.error('数据加载失败:', err);
+    });
+  });
+
+  /**
+   * 股票选择切换
+   */
+  $stockSelect.addEventListener('change', function () {
+    var idx = parseInt(this.value);
+    if (idx >= 0 && idx < state.stocks.length) {
+      state.currentStockIdx = idx;
+      state.currentData = state.stocks[idx].data;
+      refreshAll();
+    }
+  });
+
+  /**
+   * 指标开关切换
+   */
+  $toggleMA.addEventListener('change', function () {
+    $paramsMA.className = 'param-group' + (this.checked ? '' : ' hidden');
+    debouncedRefresh();
+  });
+
+  $toggleMACD.addEventListener('change', function () {
+    $paramsMACD.className = 'param-group' + (this.checked ? '' : ' hidden');
+    debouncedRefresh();
+  });
+
+  $toggleBollinger.addEventListener('change', function () {
+    $paramsBollinger.className = 'param-group' + (this.checked ? '' : ' hidden');
+    debouncedRefresh();
+  });
+
+  $toggleVolatility.addEventListener('change', function () {
+    $paramsVolatility.className = 'param-group' + (this.checked ? '' : ' hidden');
+    debouncedRefresh();
+  });
+
+  /**
+   * MA 类型切换
+   */
+  document.getElementById('ma-type').addEventListener('change', function () {
+    debouncedRefresh();
+  });
+
+  /**
+   * 所有滑块的 input 事件（实时更新 + 防抖重绘）
+   */
+  Object.keys(sliders).forEach(function (key) {
+    var slider = sliders[key];
+    slider.el.addEventListener('input', function () {
+      updateSliderDisplay(key);
+      debouncedRefresh();
+    });
+  });
+
+  /**
+   * 窗口 resize 事件
+   */
+  window.addEventListener('resize', debounce(function () {
+    ChartsManager.resizeAll();
+  }, 150));
+
+  /**
+   * 页面初始化时设置默认参数面板状态
+   */
+  (function init() {
+    // MA 默认开启，其余关闭
+    $paramsMACD.className = 'param-group hidden';
+    $paramsBollinger.className = 'param-group hidden';
+    $paramsVolatility.className = 'param-group hidden';
+
+    // 初始化所有滑块显示值
+    Object.keys(sliders).forEach(function (key) {
+      updateSliderDisplay(key);
+    });
+  })();
+
+})();
+</script>
+
+</body>
+</html>
