@@ -632,6 +632,514 @@
     "caution": "技术指标不能直接等同于买卖建议，后续仍需策略回测验证。"
   },
   {
+    "id": "task3_case_01",
+    "task": "TASK3",
+    "task_title": "策略首秀：用均线交叉反应市场趋势变化",
+    "title": "双均线 / 回测 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task3/task3_case_01.html",
+    "public_url": "",
+    "topic": "双均线 / 回测",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "金叉死叉",
+      "夏普比率",
+      "信号解释到位",
+      "交互体验好"
+    ],
+    "why_selected": "这个作品适合参考双均线策略的信号展示、参数对比和回测结果表达。",
+    "caution": "均线参数容易过拟合，需要比较不同股票和周期。"
+  },
+  {
+    "id": "task3_case_02",
+    "task": "TASK3",
+    "task_title": "策略首秀：用均线交叉反应市场趋势变化",
+    "title": "双均线 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task3/task3_case_02.html",
+    "public_url": "",
+    "topic": "双均线",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "夏普比率",
+      "数据来源清楚",
+      "图表完整",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品适合参考双均线策略的信号展示、参数对比和回测结果表达。",
+    "caution": "均线参数容易过拟合，需要比较不同股票和周期。"
+  },
+  {
+    "id": "task3_case_03",
+    "task": "TASK3",
+    "task_title": "策略首秀：用均线交叉反应市场趋势变化",
+    "title": "就像存银行 / 600545.SH / 双均线 / 回测 · 分析报告案例",
+    "type": "local_html",
+    "copied_path": "showcases/task3/task3_case_03.html",
+    "public_url": "",
+    "topic": "就像存银行 / 600545.SH / 双均线 / 回测",
+    "tech": [
+      "HTML"
+    ],
+    "learning_tags": [
+      "金叉死叉",
+      "夏普比率",
+      "参数敏感性",
+      "数据来源清楚"
+    ],
+    "why_selected": "这个作品适合参考双均线策略的信号展示、参数对比和回测结果表达。",
+    "caution": "均线参数容易过拟合，需要比较不同股票和周期。"
+  },
+  {
+    "id": "task3_case_04",
+    "task": "TASK3",
+    "task_title": "策略首秀：用均线交叉反应市场趋势变化",
+    "title": "双均线 / 回测 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task3/task3_case_04.html",
+    "public_url": "",
+    "topic": "双均线 / 回测",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "夏普比率",
+      "数据来源清楚",
+      "图表完整",
+      "指标公式清楚"
+    ],
+    "why_selected": "这个作品适合参考双均线策略的信号展示、参数对比和回测结果表达。",
+    "caution": "均线参数容易过拟合，需要比较不同股票和周期。"
+  },
+  {
+    "id": "task3_case_05",
+    "task": "TASK3",
+    "task_title": "策略首秀：用均线交叉反应市场趋势变化",
+    "title": "贵州茅台 / 600900 / 双均线 / 回测 · 作品案例",
+    "type": "local_html",
+    "copied_path": "showcases/task3/task3_case_05.html",
+    "public_url": "",
+    "topic": "贵州茅台 / 600900 / 双均线 / 回测",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "夏普比率",
+      "数据来源清楚",
+      "图表完整",
+      "指标公式清楚"
+    ],
+    "why_selected": "这个作品适合参考双均线策略的信号展示、参数对比和回测结果表达。",
+    "caution": "均线参数容易过拟合，需要比较不同股票和周期。"
+  },
+  {
+    "id": "task3_case_06",
+    "task": "TASK3",
+    "task_title": "策略首秀：用均线交叉反应市场趋势变化",
+    "title": "双均线 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task3/task3_case_06.html",
+    "public_url": "",
+    "topic": "双均线",
+    "tech": [
+      "Plotly"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "图表完整",
+      "指标公式清楚",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品适合参考双均线策略的信号展示、参数对比和回测结果表达。",
+    "caution": "均线参数容易过拟合，需要比较不同股票和周期。"
+  },
+  {
+    "id": "task3_case_07",
+    "task": "TASK3",
+    "task_title": "策略首秀：用均线交叉反应市场趋势变化",
+    "title": "双均线 / 回测 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task3/task3_case_07.html",
+    "public_url": "",
+    "topic": "双均线 / 回测",
+    "tech": [
+      "Chart.js",
+      "Canvas"
+    ],
+    "learning_tags": [
+      "夏普比率",
+      "数据来源清楚",
+      "图表完整",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品适合参考双均线策略的信号展示、参数对比和回测结果表达。",
+    "caution": "均线参数容易过拟合，需要比较不同股票和周期。"
+  },
+  {
+    "id": "task3_case_08",
+    "task": "TASK3",
+    "task_title": "策略首秀：用均线交叉反应市场趋势变化",
+    "title": "双均线 / 回测 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task3/task3_case_08.html",
+    "public_url": "",
+    "topic": "双均线 / 回测",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "金叉死叉",
+      "夏普比率",
+      "数据来源清楚",
+      "指标公式清楚"
+    ],
+    "why_selected": "这个作品适合参考双均线策略的信号展示、参数对比和回测结果表达。",
+    "caution": "均线参数容易过拟合，需要比较不同股票和周期。"
+  },
+  {
+    "id": "task3_case_09",
+    "task": "TASK3",
+    "task_title": "策略首秀：用均线交叉反应市场趋势变化",
+    "title": "双均线 / 回测 · 分析报告案例",
+    "type": "local_html",
+    "copied_path": "showcases/task3/task3_case_09.html",
+    "public_url": "",
+    "topic": "双均线 / 回测",
+    "tech": [
+      "HTML"
+    ],
+    "learning_tags": [
+      "夏普比率",
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整"
+    ],
+    "why_selected": "这个作品适合参考双均线策略的信号展示、参数对比和回测结果表达。",
+    "caution": "均线参数容易过拟合，需要比较不同股票和周期。"
+  },
+  {
+    "id": "task3_case_10",
+    "task": "TASK3",
+    "task_title": "策略首秀：用均线交叉反应市场趋势变化",
+    "title": "贵州茅台 / 600519.SH / 双均线 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task3/task3_case_10.html",
+    "public_url": "",
+    "topic": "贵州茅台 / 600519.SH / 双均线",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "夏普比率",
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整"
+    ],
+    "why_selected": "这个作品适合参考双均线策略的信号展示、参数对比和回测结果表达。",
+    "caution": "均线参数容易过拟合，需要比较不同股票和周期。"
+  },
+  {
+    "id": "task3_case_11",
+    "task": "TASK3",
+    "task_title": "策略首秀：用均线交叉反应市场趋势变化",
+    "title": "300223.SZ / 回测 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task3/task3_case_11.html",
+    "public_url": "",
+    "topic": "300223.SZ / 回测",
+    "tech": [
+      "ECharts",
+      "SVG"
+    ],
+    "learning_tags": [
+      "金叉死叉",
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整"
+    ],
+    "why_selected": "这个作品适合参考双均线策略的信号展示、参数对比和回测结果表达。",
+    "caution": "均线参数容易过拟合，需要比较不同股票和周期。"
+  },
+  {
+    "id": "task3_case_12",
+    "task": "TASK3",
+    "task_title": "策略首秀：用均线交叉反应市场趋势变化",
+    "title": "双均线 / 回测 · 作品案例",
+    "type": "local_html",
+    "copied_path": "showcases/task3/task3_case_12.html",
+    "public_url": "",
+    "topic": "双均线 / 回测",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "夏普比率",
+      "时间区间完整",
+      "指标公式清楚",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品适合参考双均线策略的信号展示、参数对比和回测结果表达。",
+    "caution": "均线参数容易过拟合，需要比较不同股票和周期。"
+  },
+  {
+    "id": "task4_case_01",
+    "task": "TASK4",
+    "task_title": "复刻传奇：海龟交易法则实战演练",
+    "title": "海龟策略 / ATR · 作品案例",
+    "type": "local_html",
+    "copied_path": "showcases/task4/task4_case_01.html",
+    "public_url": "",
+    "topic": "海龟策略 / ATR",
+    "tech": [
+      "Chart.js",
+      "Canvas"
+    ],
+    "learning_tags": [
+      "图表完整",
+      "指标公式清楚",
+      "信号解释到位",
+      "回测指标完整"
+    ],
+    "why_selected": "这个作品适合参考海龟策略中通道突破、ATR 和止损纪律的可视化表达。",
+    "caution": "趋势突破策略在震荡市场中可能频繁失效，需要结合止损纪律。"
+  },
+  {
+    "id": "task4_case_02",
+    "task": "TASK4",
+    "task_title": "复刻传奇：海龟交易法则实战演练",
+    "title": "ATR · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task4/task4_case_02.html",
+    "public_url": "",
+    "topic": "ATR",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "图表完整",
+      "信号解释到位",
+      "回测指标完整",
+      "可视化实现完整"
+    ],
+    "why_selected": "这个作品适合参考海龟策略中通道突破、ATR 和止损纪律的可视化表达。",
+    "caution": "趋势突破策略在震荡市场中可能频繁失效，需要结合止损纪律。"
+  },
+  {
+    "id": "task4_case_03",
+    "task": "TASK4",
+    "task_title": "复刻传奇：海龟交易法则实战演练",
+    "title": "宁德时代 / 688256.SH / 海龟策略 · 作品案例",
+    "type": "local_html",
+    "copied_path": "showcases/task4/task4_case_03.html",
+    "public_url": "",
+    "topic": "宁德时代 / 688256.SH / 海龟策略",
+    "tech": [
+      "Plotly"
+    ],
+    "learning_tags": [
+      "时间区间完整",
+      "图表完整",
+      "信号解释到位",
+      "交互体验好"
+    ],
+    "why_selected": "这个作品适合参考海龟策略中通道突破、ATR 和止损纪律的可视化表达。",
+    "caution": "趋势突破策略在震荡市场中可能频繁失效，需要结合止损纪律。"
+  },
+  {
+    "id": "task4_case_04",
+    "task": "TASK4",
+    "task_title": "复刻传奇：海龟交易法则实战演练",
+    "title": "600031.SH / 海龟策略 / ATR · 策略回测看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task4/task4_case_04.html",
+    "public_url": "",
+    "topic": "600031.SH / 海龟策略 / ATR",
+    "tech": [
+      "HTML"
+    ],
+    "learning_tags": [
+      "时间区间完整",
+      "图表完整",
+      "指标公式清楚",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品适合参考海龟策略中通道突破、ATR 和止损纪律的可视化表达。",
+    "caution": "趋势突破策略在震荡市场中可能频繁失效，需要结合止损纪律。"
+  },
+  {
+    "id": "task4_case_05",
+    "task": "TASK4",
+    "task_title": "复刻传奇：海龟交易法则实战演练",
+    "title": "中芯国际 / 600276.SH / ATR · 分析报告案例",
+    "type": "local_html",
+    "copied_path": "showcases/task4/task4_case_05.html",
+    "public_url": "",
+    "topic": "中芯国际 / 600276.SH / ATR",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "信号解释到位",
+      "交互体验好",
+      "回测指标完整"
+    ],
+    "why_selected": "这个作品适合参考海龟策略中通道突破、ATR 和止损纪律的可视化表达。",
+    "caution": "趋势突破策略在震荡市场中可能频繁失效，需要结合止损纪律。"
+  },
+  {
+    "id": "task4_case_06",
+    "task": "TASK4",
+    "task_title": "复刻传奇：海龟交易法则实战演练",
+    "title": "600547.SH / ATR · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task4/task4_case_06.html",
+    "public_url": "",
+    "topic": "600547.SH / ATR",
+    "tech": [
+      "ECharts",
+      "Plotly"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品适合参考海龟策略中通道突破、ATR 和止损纪律的可视化表达。",
+    "caution": "趋势突破策略在震荡市场中可能频繁失效，需要结合止损纪律。"
+  },
+  {
+    "id": "task4_case_07",
+    "task": "TASK4",
+    "task_title": "复刻传奇：海龟交易法则实战演练",
+    "title": "贵州茅台 / 600519.SH / 海龟策略 / ATR · 分析报告案例",
+    "type": "local_html",
+    "copied_path": "showcases/task4/task4_case_07.html",
+    "public_url": "",
+    "topic": "贵州茅台 / 600519.SH / 海龟策略 / ATR",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品适合参考海龟策略中通道突破、ATR 和止损纪律的可视化表达。",
+    "caution": "趋势突破策略在震荡市场中可能频繁失效，需要结合止损纪律。"
+  },
+  {
+    "id": "task4_case_08",
+    "task": "TASK4",
+    "task_title": "复刻传奇：海龟交易法则实战演练",
+    "title": "中芯国际 / 688981.SH / ATR · 分析报告案例",
+    "type": "local_html",
+    "copied_path": "showcases/task4/task4_case_08.html",
+    "public_url": "",
+    "topic": "中芯国际 / 688981.SH / ATR",
+    "tech": [
+      "HTML"
+    ],
+    "learning_tags": [
+      "策略适用场景",
+      "数据来源清楚",
+      "时间区间完整",
+      "图表完整"
+    ],
+    "why_selected": "这个作品适合参考海龟策略中通道突破、ATR 和止损纪律的可视化表达。",
+    "caution": "趋势突破策略在震荡市场中可能频繁失效，需要结合止损纪律。"
+  },
+  {
+    "id": "task4_case_09",
+    "task": "TASK4",
+    "task_title": "复刻传奇：海龟交易法则实战演练",
+    "title": "ATR · 作品案例",
+    "type": "local_html",
+    "copied_path": "showcases/task4/task4_case_09.html",
+    "public_url": "",
+    "topic": "ATR",
+    "tech": [
+      "Notebook"
+    ],
+    "learning_tags": [
+      "数据来源清楚",
+      "时间区间完整",
+      "指标公式清楚",
+      "信号解释到位"
+    ],
+    "why_selected": "这个作品适合参考海龟策略中通道突破、ATR 和止损纪律的可视化表达。",
+    "caution": "趋势突破策略在震荡市场中可能频繁失效，需要结合止损纪律。"
+  },
+  {
+    "id": "task4_case_10",
+    "task": "TASK4",
+    "task_title": "复刻传奇：海龟交易法则实战演练",
+    "title": "ATR · 分析报告案例",
+    "type": "local_html",
+    "copied_path": "showcases/task4/task4_case_10.html",
+    "public_url": "",
+    "topic": "ATR",
+    "tech": [
+      "HTML"
+    ],
+    "learning_tags": [
+      "时间区间完整",
+      "指标公式清楚",
+      "信号解释到位",
+      "回测指标完整"
+    ],
+    "why_selected": "这个作品适合参考海龟策略中通道突破、ATR 和止损纪律的可视化表达。",
+    "caution": "趋势突破策略在震荡市场中可能频繁失效，需要结合止损纪律。"
+  },
+  {
+    "id": "task4_case_11",
+    "task": "TASK4",
+    "task_title": "复刻传奇：海龟交易法则实战演练",
+    "title": "兆易创新 / 海龟策略 / ATR · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task4/task4_case_11.html",
+    "public_url": "",
+    "topic": "兆易创新 / 海龟策略 / ATR",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "图表完整",
+      "信号解释到位",
+      "回测指标完整",
+      "可视化实现完整"
+    ],
+    "why_selected": "这个作品适合参考海龟策略中通道突破、ATR 和止损纪律的可视化表达。",
+    "caution": "趋势突破策略在震荡市场中可能频繁失效，需要结合止损纪律。"
+  },
+  {
+    "id": "task4_case_12",
+    "task": "TASK4",
+    "task_title": "复刻传奇：海龟交易法则实战演练",
+    "title": "上海银行 / 海龟策略 / ATR · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task4/task4_case_12.html",
+    "public_url": "",
+    "topic": "上海银行 / 海龟策略 / ATR",
+    "tech": [
+      "Canvas"
+    ],
+    "learning_tags": [
+      "时间区间完整",
+      "图表完整",
+      "信号解释到位",
+      "交互体验好"
+    ],
+    "why_selected": "这个作品适合参考海龟策略中通道突破、ATR 和止损纪律的可视化表达。",
+    "caution": "趋势突破策略在震荡市场中可能频繁失效，需要结合止损纪律。"
+  },
+  {
     "id": "external_case_01",
     "task": "TASK1",
     "task_title": "量化交易初体验：从零搭建数据引擎",
