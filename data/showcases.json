@@ -1140,6 +1140,173 @@
     "caution": "趋势突破策略在震荡市场中可能频繁失效，需要结合止损纪律。"
   },
   {
+    "id": "task5_case_01",
+    "task": "TASK5",
+    "task_title": "AI交易引擎：机器学习算法与场景应用",
+    "title": "ROC · 作品案例",
+    "type": "local_html",
+    "copied_path": "showcases/task5/task5_case_01.html",
+    "public_url": "",
+    "topic": "ROC",
+    "tech": [
+      "Notebook"
+    ],
+    "learning_tags": [
+      "分类模型",
+      "指标公式清楚",
+      "信号解释到位",
+      "交互体验好"
+    ],
+    "why_selected": "这个作品适合参考分类模型评估、ROC/AUC 和混淆矩阵的结果呈现。",
+    "caution": "模型指标高不代表可交易性强，应关注样本外表现。"
+  },
+  {
+    "id": "task5_case_02",
+    "task": "TASK5",
+    "task_title": "AI交易引擎：机器学习算法与场景应用",
+    "title": "AUC / ROC · 作品案例",
+    "type": "local_html",
+    "copied_path": "showcases/task5/task5_case_02.html",
+    "public_url": "",
+    "topic": "AUC / ROC",
+    "tech": [
+      "HTML"
+    ],
+    "learning_tags": [
+      "AUC",
+      "指标公式清楚",
+      "信号解释到位",
+      "交互体验好"
+    ],
+    "why_selected": "这个作品适合参考分类模型评估、ROC/AUC 和混淆矩阵的结果呈现。",
+    "caution": "模型指标高不代表可交易性强，应关注样本外表现。"
+  },
+  {
+    "id": "task5_case_03",
+    "task": "TASK5",
+    "task_title": "AI交易引擎：机器学习算法与场景应用",
+    "title": "AUC / ROC · 分析报告案例",
+    "type": "local_html",
+    "copied_path": "showcases/task5/task5_case_03.html",
+    "public_url": "",
+    "topic": "AUC / ROC",
+    "tech": [
+      "HTML"
+    ],
+    "learning_tags": [
+      "分类模型",
+      "AUC",
+      "模型评价",
+      "时间区间完整"
+    ],
+    "why_selected": "这个作品适合参考分类模型评估、ROC/AUC 和混淆矩阵的结果呈现。",
+    "caution": "模型指标高不代表可交易性强，应关注样本外表现。"
+  },
+  {
+    "id": "task5_case_04",
+    "task": "TASK5",
+    "task_title": "AI交易引擎：机器学习算法与场景应用",
+    "title": "AUC / ROC · 作品案例",
+    "type": "local_html",
+    "copied_path": "showcases/task5/task5_case_04.html",
+    "public_url": "",
+    "topic": "AUC / ROC",
+    "tech": [
+      "Notebook"
+    ],
+    "learning_tags": [
+      "分类模型",
+      "AUC",
+      "模型评价",
+      "数据来源清楚"
+    ],
+    "why_selected": "这个作品适合参考分类模型评估、ROC/AUC 和混淆矩阵的结果呈现。",
+    "caution": "模型指标高不代表可交易性强，应关注样本外表现。"
+  },
+  {
+    "id": "task6_case_01",
+    "task": "TASK6",
+    "task_title": "智能决策者：用机器学习定制专属策略",
+    "title": "v3 ML量化选股策略仪表盘 — 季度指标表格 + 回测可视化 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task6/task6_case_01.html",
+    "public_url": "",
+    "topic": "v3 ML量化选股策略仪表盘 — 季度指标表格 + 回测可视化",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "季度收益对比",
+      "图表完整",
+      "信号解释到位",
+      "交互体验好"
+    ],
+    "why_selected": "这个作品适合参考因子工程、收益预测和策略回测结果的组织方式。",
+    "caution": "预测模型转成交易策略时，要额外考虑调仓频率和交易成本。"
+  },
+  {
+    "id": "task6_case_02",
+    "task": "TASK6",
+    "task_title": "智能决策者：用机器学习定制专属策略",
+    "title": "ml_stock_selection · 策略回测看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task6/task6_case_02.html",
+    "public_url": "",
+    "topic": "ml_stock_selection",
+    "tech": [
+      "Notebook"
+    ],
+    "learning_tags": [
+      "季度收益对比",
+      "交互体验好",
+      "模型评价清楚"
+    ],
+    "why_selected": "这个作品适合参考因子工程、收益预测和策略回测结果的组织方式。",
+    "caution": "预测模型转成交易策略时，要额外考虑调仓频率和交易成本。"
+  },
+  {
+    "id": "task6_case_03",
+    "task": "TASK6",
+    "task_title": "智能决策者：用机器学习定制专属策略",
+    "title": "TASK6 机器学习选股与动态仓位看板 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task6/task6_case_03.html",
+    "public_url": "",
+    "topic": "TASK6 机器学习选股与动态仓位看板",
+    "tech": [
+      "HTML"
+    ],
+    "learning_tags": [
+      "模型策略化",
+      "季度收益对比",
+      "时间区间完整",
+      "图表完整"
+    ],
+    "why_selected": "这个作品适合参考因子工程、收益预测和策略回测结果的组织方式。",
+    "caution": "预测模型转成交易策略时，要额外考虑调仓频率和交易成本。"
+  },
+  {
+    "id": "task6_case_04",
+    "task": "TASK6",
+    "task_title": "智能决策者：用机器学习定制专属策略",
+    "title": "027025 · 交互式看板案例",
+    "type": "local_html",
+    "copied_path": "showcases/task6/task6_case_04.html",
+    "public_url": "",
+    "topic": "027025",
+    "tech": [
+      "ECharts"
+    ],
+    "learning_tags": [
+      "季度收益对比",
+      "指标公式清楚",
+      "信号解释到位",
+      "回测指标完整"
+    ],
+    "why_selected": "这个作品适合参考因子工程、收益预测和策略回测结果的组织方式。",
+    "caution": "预测模型转成交易策略时，要额外考虑调仓频率和交易成本。"
+  },
+  {
     "id": "external_case_01",
     "task": "TASK1",
     "task_title": "量化交易初体验：从零搭建数据引擎",
